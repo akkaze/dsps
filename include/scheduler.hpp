@@ -24,8 +24,17 @@ public:
        role_ = role::scheduler; 
        // nop
     }
-    behavior_type recieving() override {
-    static void connecting(stateful_actor<scheduler_state>* self,
+    static behavior_type receiving() override {
+        [connect_to_opponant_atom, connect 
+            const std::string& host, uint16_t port,
+            const node_role& role] {
+            connecting(this,host,port); 
+            for(auto serv : this->state->current_servers)
+                this->delegate(actor_cast<serv>,connect,host,port,role);
+        }
+    }
+    //connecting routine when the scheduler receive the connect to opponant atom
+    void connecting(stateful_actor<scheduler_state>* self,
         const std::string& host, uint16_t port,
         const node_role& role) {
             auto mm = self->system().middleman().actor_handle();
@@ -33,22 +42,19 @@ public:
             [=](const node_id&, strong_actor_ptr client,
                 const std::set<std::string>& ifs) {
             if (!client) {
-                 aout(self) << R"(*** no client found at ")" << host << R"(":)"
+                 aout(this) << R"(*** no client found at ")" << host << R"(":)"
                         << port << endl;
                 return;
             }
             if (!ifs.empty()) {
-                aout(self) << R"(*** typed actor found at ")" << host << R"(":)"
+                aout(this) << R"(*** typed actor found at ")" << host << R"(":)"
                         << port << ", but expected an untyped actor "<< endl;
                 return;
             }
             if(role == node_role::worker) {
-                self->state->current->
-        );   
-        if(role == node_role::worker) {
-            for(auto server : self->state->current_servers) {
-                
-        }     
+                this->state->current_workers.push_back(client);
+            }
+        );        
     }
 private:
     node_role role_;
