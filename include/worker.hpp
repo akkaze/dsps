@@ -20,12 +20,10 @@ struct worker_sate {
     strong_actor_ptr scheduler;
     vector<strong_actor_ptr> current_servers;
 };
-class worker : public stateful_actor<worker_state> { 
+class worker : public node { 
 public:
-    worker(actor_config& cfg) : stateful_actor(cfg) {
-        role_ = role::worker;
+    worker(actor_config& cfg) : stateful_actor(cfg,node_role::worker) {
         init();
-        // nop
     }
     void override act() {
         bool running = true;
