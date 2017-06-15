@@ -23,10 +23,7 @@ struct scheduler_sate {
 
 class scheduler : node {
 public:
-    scheduler(actor_config& cfg) : stateful_actor(cfg) {
-       role_ = role::scheduler; 
-       // nop
-    }
+    scheduler(actor_config& cfg) : stateful_actor(cfg,node_role::scheduler) {}
     void act() override {
         bool running = true;
         this->receive_while(running) (
@@ -35,12 +32,14 @@ public:
                 const std::string& host, uint16_t port,
                 const node_role& role] {
                 //firtst connect to incoming actor
-                connect(this,host,port);
+                strong_actor_ptr incoming_node = connect(this,host,port);
                 //after connected to that actor,next,try to deliver this message to its opponant
                 if(role == node_role::worker) {
+                    state_.current_workers.push_back(incoming_node);
                     for(auto server : this->state->current_servers)
                         this->delegate(actor_cast<actor>(server),connect,host,port);
                 } else if(role == node_role::server) {
+                    state_.current_servers.push_back(incoming_node);
                     for(auto work : this->state->current_workers) 
                         this->delegate(actor_cast<actor>(worker),connect,host,port);
                 }
