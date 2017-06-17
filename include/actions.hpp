@@ -1,3 +1,6 @@
+#ifndef ACTIONS_HPP
+#define ACTIONS_HPP
+
 #include <string>
 #include <iostream>
 #include <chrono>
@@ -10,3 +13,5 @@ using namespace caf;
 
 using add_atom = atom_constant<atom("add")>;
 using connect_to_opponent_atom = atom_constant<atom("connect_to_oppenent")>
+
+#endif
