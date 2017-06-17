@@ -40,6 +40,9 @@ protected:
         );
         return incoming_node;
     }
+    void start() {
+        actor_manager::get()->spawn(this);
+    }
     const node_role& get_role() {
         return role_;
     }
