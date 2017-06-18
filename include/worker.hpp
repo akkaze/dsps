@@ -22,34 +22,37 @@ struct worker_sate {
 };
 class worker : public node { 
 public:
-    worker(actor_config& cfg) : stateful_actor(cfg,node_role::worker) {
-        init();
+    worker(config& cfg) : node(cfg) {
+        auto messager = actor_manager->get()->spawn(worker::messager_fun);
+        anon_send(messager,connect_atom::value);
     }
-    void override act() {
+    static void messager_fun(blocking_actor* self) {
         bool running = true;
-        this->receive_while(running) (
-            [connect_to_opponant_atom atom,
-                const string& host,uint16_t port] {
-                strong_actor_ptr incoming_node = connect(host,port);
-                state_.current_servers.push_back(incoming_node);                      
+        self->receive_while(running) (
+            [=](connect_atom atom) {
+                connect_to_scheduler(self);   
             }
+            [=](connect_to_opponant_atom atom,
+                const string& host,uint16_t port) {
+                strong_actor_ptr incoming_node = connect(self,host,port);
+                this->state_.current_servers.push_back(incoming_node);                      
+            }
+                   
         );      
     }
     //for initing,we need to connect to scheduler
-    void init() {
+    void connect_to_scheduler(blocking_actor* self) {
+        const std::string& scheduler_host = this->scheduler_host();
+        const uint16_t& scheduler_port = this->scheduler_port();
         auto mm = self->system().middleman().actor_handle();
-        self->request(mm, infinite, connect_atom::value, host, port).receive(
+        self->request(mm, infinite, connect_atom::value, scheduler_host, scheduler_port).receive(
             [&](const node_id&, strong_actor_ptr scheduler,
                 const std::set<std::string>& ifs) {
                 this->state_.scheduler = scheduler;
             }
             [&](error& err) {
-                aout(this) << this->system().render(err) << endl;
+                aout(self) << self->system().render(err) << endl;
             }      
-    }
-    //connect to opponant nodes
-    void connect_to_opponant() {
-        self->request(actor_cast<actor>(this))
     }
 private:
     worker_state state_;
