@@ -1,5 +1,5 @@
-#ifndef WORKER_HPP
-#define WORKER_HPP
+#ifndef SERVER_HPP
+#define SERVER_HPP
 #include <string>
 #include <iostream>
 #include <vector>
@@ -16,45 +16,35 @@ using namespace std::chrono;
 using namespace caf;
 
 //struct for worker internal state
-struct server_sate {
-    strong_actor_ptr scheduler;
-    vector<strong_actor_ptr> current_workers;
+struct server_state {
+    actor scheduler;
+    vector<actor> current_wokrers;
 };
-class server : public node { 
+
+class server_node : public node { 
 public:
-    server(config& cfg) : node(cfg) {
-        auto messager = actor_manager->get()->spawn(worker::messager_fun);
-        anon_send(messager,connect_atom::value);
+    server_node(config& cfg) : node(cfg) {
+        auto server = actor_manager->get()->spawn(server_node::server);
+        anon_send(server,connect_atom::value);
     }
-    static void messager_fun(blocking_actor* self) {
-        bool running = true;
-        self->receive_while(running) (
+    static void server(stateful_actor<server_state>* self) {
+        return {
             [=](connect_atom atom) {
-                connect_to_scheduler(self);   
+                auto scheduler_host = this->scheduler_host();
+                auto scheduler_port = this->scheduler_port();
+                auto scheduler = this->connect(reinpreter_cast<actor*>(self),
+                    scheduler_host,scheduler_port);
+                self->state().scheduler = scheduler;
             }
             [=](connect_to_opponant_atom atom,
                 const string& host,uint16_t port) {
-                strong_actor_ptr incoming_node = connect(self,host,port);
-                this->state_.current_workers.push_back(incoming_node);                      
+                auto incoming_node = this->connect(
+                    reinpreter_cast<actor*>(self),
+                    host,port);
+                self->state().current_workers.push_back(incoming_node);                      
             }
                    
-        );      
+        };      
     }
-    //for initing,we need to connect to scheduler
-    void connect_to_scheduler(blocking_actor* self) {
-        const std::string& scheduler_host = this->scheduler_host();
-        const uint16_t& scheduler_port = this->scheduler_port();
-        auto mm = self->system().middleman().actor_handle();
-        self->request(mm, infinite, connect_atom::value, scheduler_host, scheduler_port).receive(
-            [&](const node_id&, strong_actor_ptr scheduler,
-                const std::set<std::string>& ifs) {
-                this->state_.scheduler = scheduler;
-            }
-            [&](error& err) {
-                aout(self) << self->system().render(err) << endl;
-            }      
-    }
-private:
-    worker_state state_;
 }; 
 #endif
