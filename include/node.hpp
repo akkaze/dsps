@@ -15,41 +15,32 @@ using namespace std;
 using namespace std::chrono;
 using namespace caf;
 
-class node : public blocking_actor {
-public: 
-    node(actor_config& cfg) : blocking_actor(cfg) {}
-    node(actor_config& cfg,const node_role& role) : blocking_actor(cfg),role_(role) {} 
+class node : public {
+public:
+    node(const config& cfg) {
+        cfg_ = cfg;   
+    } 
 protected:
-    strong_actor_ptr connect(const std::string& host, uint16_t port) {
-        strong_actor_ptr incoming_node;
-        auto mm = this->system().middleman().actor_handle();
-        this->request(mm, infinite, connect_atom::value, host, port).receive(
-                [&](const node_id&, strong_actor_ptr node,
-                    const std::set<std::string>& ifs) {
-                if (!node) {
-                        aout(this) << R"(*** no node found at ")" << host << R"(":)"
-                               << port << endl;
-                        return;
-                    }
-                    aout(this) << R"(connected)" << endl;
-                    incoming_node = node;
-                },
-                [&](error& err) {
-                    aout(this) << this->system().render(err) << endl;
-                }
-        );
-        return incoming_node;
+    const actor& connect(actor* self,const std::string& host, uint16_t port) {
+        auto incoming_node = self->system().middleman().remote_actor(host,port);
+        CHECK(incoming_node)<< "unable to connect to node at host: " 
+                << host << "port :" << port
+                << self->system().render(incoming_node.error());
+        return *incoming_node;
     }
-    void start() {
-        actor_manager::get()->spawn(this);
-    }
-    const node_role& get_role() {
-        return role_;
+    const node_role& role() const {
+        return cfg_.role;
     }
     void set_role(const node_role& role) {
-        role_ = role;
+        cfg_.role = role;
+    }
+    const std::string& scheduler_host() const {
+        return cfg_.scheduler_host;
+    }
+    const uint16_t scheduler_port() const {
+        return cfg_.scheduler_port;
     }
 private:
-    node_role role_;
+    config cfg_;
 };
 #endif
