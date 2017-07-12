@@ -24,8 +24,14 @@ struct worker_state {
 class worker_node : public node { 
 public:
     worker_node(config& cfg) : node(cfg) {
-        auto worker = actor_manager->get()->spawn(worker_node::worker);
-        anon_send(worker,connect_atom::value);
+        worker_ = actor_manager->get()->spawn(worker_node::worker);
+        anon_send(worker_,connect_atom::value);
+    }
+    void push(const message& msg) {
+        anon_send(worker_,push_atom::value,msg);
+    }
+    void pull(message& msg) {
+        anon_send(worker_,pull_atom::value,msg);
     }
     static void worker(stateful_actor<worker_state>* self) {
         return {
@@ -43,8 +49,16 @@ public:
                     host,port);
                 self->state().current_servers.push_back(incoming_node);                      
             }
-                   
+            [](push_atom atom,const message& msg) {
+                messager_->send(msg);
+            }
+            [](pull_atom atom,mesage& msg) {
+                messager_->receive(msg);
+            }        
         };      
     }
+private:
+    messager messager_;
+    actor worker_;
 }; 
 #endif
