@@ -21,33 +21,37 @@ struct scheduler_sate {
     vector<strong_actor_ptr> current_workers;
 };
 
-class scheduler : node {
+class scheduler_node : node {
 public:
-    scheduler(actor_config& cfg) : stateful_actor(cfg,node_role::scheduler) {}
-    void act() override {
-        bool running = true;
-        this->receive_while(running) (
-            //received the connect to opponant message
-            [connect_to_opponant_atom connect,
-                const std::string& host, uint16_t port,
-                const node_role& role] {
-                //firtst connect to incoming actor
-                strong_actor_ptr incoming_node = connect(this,host,port);
-                //after connected to that actor,next,try to deliver this message to its opponant
-                if(role == node_role::worker) {
-                    state_.current_workers.push_back(incoming_node);
-                    for(auto server : this->state->current_servers)
-                        this->delegate(actor_cast<actor>(server),connect,host,port);
-                } else if(role == node_role::server) {
-                    state_.current_servers.push_back(incoming_node);
-                    for(auto work : this->state->current_workers) 
-                        this->delegate(actor_cast<actor>(worker),connect,host,port);
-                }
-            }
-        );
+    scheduler_node(node& cfg) : node(cfg) {}
+    void demand_to_block(const block_group& group) {
+        scoped_actor blocking_actor{actor_manager->get()->system()};
+        blocking_actor.request(scheduer_,infinite,block_atom::value,group);
     }
-    
+
+    static behavior scheduler(stateful_actor<scheduler_state>* self) {
+       return {
+            [&](const connect_to_opponant_atom& atom,
+                std::string host,uint16_t port,
+                node_role role) {
+                if(node_role == node_role::worker) {
+                    for(size_t i == 0; i < self->state().current_servers.size(); i++) {
+                        self->request(actor_cast<>)
+                    }  
+            }
+            [&](const block_atom& atom,const block_group& group) {
+                switch(group) {
+                    case block_group::all_workers:
+                        for(auto serv : self->state().current_workers) {
+                            self->request(actor_cast<actor>(serv),infinite,block_atom::value,)
+                        }
+                    default:
+                        break;
+                };
+            }
+        };
+    }
 private:
-    scheduler_state state_;
+    actor scheduler_;
 };
 #endif

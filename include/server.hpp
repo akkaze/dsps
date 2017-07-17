@@ -24,10 +24,20 @@ struct server_state {
 class server_node : public node { 
 public:
     server_node(config& cfg) : node(cfg) {
-        auto server = actor_manager->get()->spawn(server_node::server);
+        server_ = actor_manager->get()->spawn(server_node::server);
         anon_send(server,connect_atom::value);
     }
-    static void server(stateful_actor<server_state>* self) {
+    void ask_for_blocking() {
+        scoped_actor blocking_actor{actor_manager->get()->system()};
+        blocking_actor.request(server_,infinite,block_atom::value).receive(
+            [&](const continue_atom ){
+                aout(self) << "continue" << endl;
+            },
+            [&](const error& err) {
+                aout(self)  << system.render(err) << endl;
+            }
+    }
+    static behavior server(stateful_actor<server_state>* self) {
         return {
             [=](connect_atom atom) {
                 auto scheduler_host = this->scheduler_host();
@@ -43,8 +53,12 @@ public:
                     host,port);
                 self->state().current_workers.push_back(incoming_node);                      
             }
-                   
+            [=](block_atom atom) {
+                return self->delegate(self->state().scheduler,block_atom::value);    
+            }      
         };      
     }
+private:
+    actor server_;    
 }; 
 #endif
