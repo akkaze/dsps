@@ -1,0 +1,5 @@
+build
+deps
+.*
+*core*
+*.d
