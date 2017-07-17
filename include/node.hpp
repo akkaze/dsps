@@ -21,12 +21,19 @@ public:
         cfg_ = cfg;   
     } 
 protected:
+    template <class Actor = actor>
     const actor& connect(actor* self,const std::string& host, uint16_t port) {
         auto incoming_node = self->system().middleman().remote_actor(host,port);
         CHECK(incoming_node)<< "unable to connect to node at host: " 
                 << host << "port :" << port
                 << self->system().render(incoming_node.error());
         return *incoming_node;
+    }
+    template <class Actor = actor>
+    const uint16_t& publish(const actor& self) {
+        auto expected_port = self.system().middleman().publish(*self,0);
+        CHECK(expected_port) << self->system().render(expected_port.error());
+        return *expected_port;
     }
     const node_role& role() const {
         return cfg_.role;

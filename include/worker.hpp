@@ -36,11 +36,11 @@ public:
         messenger_->send(msg);        
     }
     void pull(message& msg) {
-        messenger->recv(msg);
+        messenger_->recv(msg);
     }
-    void ask_for_blocking() {
+    void ask_for_blocking(const block_group& group) {
         scoped_actor blocking_actor{actor_manager->get()->system()};
-        blocking_actor.request(worker_,infinite,block_atom::value).receive(
+        blocking_actor.request(worker_,infinite,block_atom::value,group).receive(
             [&](const continue_atom ){
                 aout(self) << "continue" << endl;
             },
@@ -63,6 +63,7 @@ public:
                     node_role::worker
                     );
             },
+            //connect to registering server
             [=](connect_to_opponant_atom atom,
                 const string& host,uint16_t port) {
                 auto incoming_node = this->connect(
@@ -70,8 +71,18 @@ public:
                     host,port);
                 self->state().current_servers.push_back(incoming_node);                      
             },
-            [=](block_atom atom) {
-                return self->delegate(self->state().scheduler,block_atom::value);    
+            //connect to existing servers
+            [=](connect_back_atom atom,
+                vector<pair<string,uint16_t>> server_host_and_ports) {
+                for(auto server_host_and_port : server_host_and_ports) {
+                    auto incoming_node = this->connect(
+                    reinpreter_cast<actor*>(self),
+                    server_host_and_port.fist,
+                    server_host_and_port.second);
+                }
+            },
+            [=](block_atom atom atom,const block_group& group) {
+                return self->delegate(self->state().scheduler,block_atom::value,group);    
             } 
         };      
     }

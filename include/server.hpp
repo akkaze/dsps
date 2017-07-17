@@ -24,7 +24,8 @@ struct server_state {
 class server_node : public node { 
 public:
     server_node(config& cfg) : node(cfg) {
-        server_ = actor_manager->get()->spawn(server_node::server);
+        server_ = actor_manager->get()->system()->spawn(server_node::server);
+        uint16_t bound_port = this->publish(server_,0);
         anon_send(server,connect_atom::value);
     }
     void ask_for_blocking() {
@@ -45,14 +46,24 @@ public:
                 auto scheduler = this->connect(reinpreter_cast<actor*>(self),
                     scheduler_host,scheduler_port);
                 self->state().scheduler = scheduler;
-            }
+            },
             [=](connect_to_opponant_atom atom,
                 const string& host,uint16_t port) {
                 auto incoming_node = this->connect(
                     reinpreter_cast<actor*>(self),
                     host,port);
                 self->state().current_workers.push_back(incoming_node);                      
-            }
+            },
+            //connect to existing servers
+            [=](connect_back_atom atom, 
+                vector<pair<string,uint16_t>> worker_host_and_ports) {
+                for(auto worker_host_and_port : worker_host_and_ports) {
+                    auto incoming_node = this->connect(
+                    reinpreter_cast<actor*>(self),
+                    worker_host_and_port.fist,
+                    worker_host_and_port.second);
+                }
+            },  
             [=](block_atom atom) {
                 return self->delegate(self->state().scheduler,block_atom::value);    
             }      
