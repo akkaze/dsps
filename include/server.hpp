@@ -19,6 +19,7 @@ using namespace caf;
 struct server_state {
     actor scheduler;
     vector<actor> current_wokrers;
+    strong_actor_ptr blk_atr;
 };
 
 class server_node : public node { 
@@ -28,14 +29,15 @@ public:
         uint16_t bound_port = this->publish(server_,0);
         anon_send(server,connect_atom::value);
     }
-    void ask_for_blocking() {
-        scoped_actor blocking_actor{actor_manager->get()->system()};
-        blocking_actor.request(server_,infinite,block_atom::value).receive(
+    void ask_for_blocking(const block_group& group) {
+        scoped_actor blk_atr{actor_manager::get()->system()};
+        blk_atr->request(server_,infinite,block_atom::value,group);
+        blk_atr->receive(
             [&](const continue_atom ){
-                aout(self) << "continue" << endl;
+                aout(blk_atr) << "continue" << endl;
             },
             [&](const error& err) {
-                aout(self)  << system.render(err) << endl;
+                aout(blk_atr)  << system.render(err) << endl;
             }
     }
     static behavior server(stateful_actor<server_state>* self) {
@@ -63,10 +65,17 @@ public:
                     worker_host_and_port.fist,
                     worker_host_and_port.second);
                 }
-            },  
-            [=](block_atom atom) {
-                return self->delegate(self->state().scheduler,block_atom::value);    
-            }      
+            }, 
+            [=](block_atom atom,const block_group& group) {
+                auto sender = self->current_sender();
+                self->state.blk_atr = sender;
+                self->request(self->state.scheduler,
+                    infinite,block_atom::value,group);
+            },
+            [=](continue_atom atom) {
+                self->request(actor_cast<actor>(self->state.blk_atr),
+                    infinite,continue_atom::value);
+            } 
         };      
     }
 private:

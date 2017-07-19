@@ -16,9 +16,10 @@ using namespace std::chrono;
 using namespace caf;
 
 //struct for scheduler internal state
-struct scheduler_sate {
+struct scheduler_state {
     vector<pair<actor,pair<string,uint16_t>> current_servers;
     vector<pair<actor,pair<string,uint16_t>> current_workers;
+    strong_actor_ptr blk_atr;
 };
 
 class scheduler_node : node {
@@ -29,12 +30,23 @@ public:
     }
     void demand_to_block(const block_group& group) {
         scoped_actor blocking_actor{actor_manager->get()->system()};
-        blocking_actor.request(scheduer_,infinite,demand_to_block_atom::value,group);
+        blocking_actor.request(scheduer_,infinite,
+            demand_to_block_atom::value,group);
     }
-
+    void ask_for_blocking(const block_group& group) {
+        scoped_actor blk_atr{actor_manager::get()->system()};
+        blk_atr->request(scheduler_,infinite,block_atom::value,group);
+        blk_atr->receive(
+            [&](const continue_atom ){
+                aout(blk_atr) << "continue" << endl;
+            },
+            [&](const error& err) {
+                aout(blk_atr)  << system.render(err) << endl;
+            }
+    }
     static behavior scheduler(stateful_actor<scheduler_state>* self) {
        return {
-            [&](const connect_to_opponant_atom& atom,
+            [=](const connect_to_opponant_atom& atom,
                 std::string host,uint16_t port,
                 node_role role) -> 
                     result<connect_back_atom,vector<pair<string,uint16_t>>>{
@@ -66,7 +78,7 @@ public:
                 } 
                  
             },
-            [&](const demand_to_block_atom& atom,const block_group& group) {
+            [=](const demand_to_block_atom& atom,const block_group& group) {
                 switch(group) {
                     case block_group::all_workers:
                         for(auto work : self->state().current_workers) {
@@ -94,6 +106,16 @@ public:
                         break;
                 };
             },
+            [=](block_atom atom,const block_group& group) {
+                auto sender = self->current_sender();
+                self->state.blk_atr = sender;
+                self->request(self->state.scheduler,infinite,
+                    block_atom::value,group);
+            },
+            [=](continue_atom atom) {
+                self->request(actor_cast<actor>(self->state.blk_atr),
+                    infinite,continue_atom::value);
+            }
         };
     }
 private:

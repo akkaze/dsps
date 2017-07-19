@@ -19,6 +19,7 @@ using namespace caf;
 struct worker_state {
     actor scheduler;
     vector<actor> current_servers;
+    strong_actor_ptr blk_atr;
 };
 
 class message;
@@ -26,7 +27,7 @@ class message;
 class worker_node : public node { 
 public:
     worker_node(config& cfg) : node(cfg) {
-        worker_ = actor_manager->get()->system()->spawn(worker_node::worker);
+        worker_ = actor_manager::get()->system()->spawn(worker_node::worker);
         //publish worker on the internet through middleman
         this->publish(worker_); 
         localhost_ = get_local_ip();
@@ -39,13 +40,14 @@ public:
         messenger_->recv(msg);
     }
     void ask_for_blocking(const block_group& group) {
-        scoped_actor blocking_actor{actor_manager->get()->system()};
-        blocking_actor.request(worker_,infinite,block_atom::value,group).receive(
+        scoped_actor blk_atr{actor_manager::get()->system()};
+        blk_atr->request(worker_,infinite,block_atom::value,group);
+        blk_atr->receive(
             [&](const continue_atom ){
-                aout(self) << "continue" << endl;
+                aout(blk_atr) << "continue" << endl;
             },
             [&](const error& err) {
-                aout(self)  << system.render(err) << endl;
+                aout(blk_atr)  << system.render(err) << endl;
             }
     }
     static void worker(stateful_actor<worker_state>* self) {
@@ -56,7 +58,7 @@ public:
                 auto scheduler = connect(
                     reinpreter_cast<actor*>(self),
                     host,port);
-                self->state().scheduler = scheduler;
+                self->state.scheduler = scheduler;
                 self->request(actor_cast<actor>(scheduler),
                     infinite,connect_to_opponant_atom::value,
                     localhost_,bound_port_,
@@ -69,7 +71,7 @@ public:
                 auto incoming_node = this->connect(
                     reinpreter_cast<actor*>(self),
                     host,port);
-                self->state().current_servers.push_back(incoming_node);                      
+                self->state.current_servers.push_back(incoming_node);                      
             },
             //connect to existing servers
             [=](connect_back_atom atom,
@@ -81,9 +83,14 @@ public:
                     server_host_and_port.second);
                 }
             },
-            [=](block_atom atom atom,const block_group& group) {
-                return self->delegate(self->state().scheduler,block_atom::value,group);    
-            } 
+            [=](block_atom atom,const block_group& group) {
+                auto sender = self->current_sender();
+                self->state.blk_atr = sender;
+                self->request(self->state.scheduler,infinite,block_atom::value,group);    
+            }, 
+            [=](continue_atom atom) {
+                self->request(actor_cast<actor>(self->state.blk_atr),infinite,continue_atom::value); 
+            }
         };      
     }
 private:
