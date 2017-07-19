@@ -10,7 +10,7 @@
 
 #include "base.hpp"
 #include "actions.hpp"
-
+#include "node.hpp"
 using namespace std;
 using namespace std::chrono;
 using namespace caf;
@@ -39,29 +39,30 @@ public:
             [&](const error& err) {
                 aout(blk_atr)  << system.render(err) << endl;
             }
+        );
     }
     static behavior server(stateful_actor<server_state>* self) {
         return {
             [=](connect_atom atom) {
                 auto scheduler_host = this->scheduler_host();
                 auto scheduler_port = this->scheduler_port();
-                auto scheduler = this->connect(reinpreter_cast<actor*>(self),
+                auto scheduler = this->connect(reinterprete_cast<actor*>(self),
                     scheduler_host,scheduler_port);
-                self->state().scheduler = scheduler;
+                self->state.scheduler = scheduler;
             },
             [=](connect_to_opponant_atom atom,
                 const string& host,uint16_t port) {
-                auto incoming_node = this->connect(
-                    reinpreter_cast<actor*>(self),
+                auto incoming_node = node::connect(
+                    reinterpret_cast<actor*>(self),
                     host,port);
-                self->state().current_workers.push_back(incoming_node);                      
+                self->state.current_workers.push_back(incoming_node);                      
             },
             //connect to existing servers
             [=](connect_back_atom atom, 
                 vector<pair<string,uint16_t>> worker_host_and_ports) {
                 for(auto worker_host_and_port : worker_host_and_ports) {
-                    auto incoming_node = this->connect(
-                    reinpreter_cast<actor*>(self),
+                    auto incoming_node = node::connect(
+                    reinterpret_cast<actor*>(self),
                     worker_host_and_port.fist,
                     worker_host_and_port.second);
                 }

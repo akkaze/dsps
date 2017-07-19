@@ -10,7 +10,7 @@
 
 #include "base.hpp"
 #include "actions.hpp"
-
+#include "node.hpp"
 using namespace std;
 using namespace std::chrono;
 using namespace caf;
@@ -56,7 +56,7 @@ public:
                 auto scheduler_host = this->scheduler_host();
                 auto scheduler_port = this->scheduler_port();
                 auto scheduler = connect(
-                    reinpreter_cast<actor*>(self),
+                    reinterpret_cast<actor*>(self),
                     host,port);
                 self->state.scheduler = scheduler;
                 self->request(actor_cast<actor>(scheduler),
@@ -68,8 +68,8 @@ public:
             //connect to registering server
             [=](connect_to_opponant_atom atom,
                 const string& host,uint16_t port) {
-                auto incoming_node = this->connect(
-                    reinpreter_cast<actor*>(self),
+                auto incoming_node = node::connect(
+                    reinterpret_cast<actor*>(self),
                     host,port);
                 self->state.current_servers.push_back(incoming_node);                      
             },
@@ -77,8 +77,8 @@ public:
             [=](connect_back_atom atom,
                 vector<pair<string,uint16_t>> server_host_and_ports) {
                 for(auto server_host_and_port : server_host_and_ports) {
-                    auto incoming_node = this->connect(
-                    reinpreter_cast<actor*>(self),
+                    auto incoming_node = node::connect(
+                    reinterpret_cast<actor*>(self),
                     server_host_and_port.fist,
                     server_host_and_port.second);
                 }
@@ -86,10 +86,12 @@ public:
             [=](block_atom atom,const block_group& group) {
                 auto sender = self->current_sender();
                 self->state.blk_atr = sender;
-                self->request(self->state.scheduler,infinite,block_atom::value,group);    
+                self->request(self->state.scheduler,
+                    infinite,block_atom::value,group);    
             }, 
             [=](continue_atom atom) {
-                self->request(actor_cast<actor>(self->state.blk_atr),infinite,continue_atom::value); 
+                self->request(actor_cast<actor>(self->state.blk_atr),
+                    infinite,continue_atom::value); 
             }
         };      
     }

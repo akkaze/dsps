@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
-#include "./base.h"
 
 namespace dsps {
 /*! \brief taken from DMLC directly */

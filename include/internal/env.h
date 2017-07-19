@@ -22,9 +22,9 @@ public:
     }
     static std::shared_ptr<Environment> _GetSharedRef(
       const std::unordered_map<std::string, std::string>* envs) {
-    static std::shared_ptr<Environment> inst_ptr(new Environment(envs));
-    return inst_ptr;
-  }
+        static std::shared_ptr<Environment> inst_ptr(new Environment(envs));
+        return inst_ptr;
+    }
     template <typename V>
     inline V GetEnv(const char *key,V default_val) {
         const char *val = find(key);
@@ -32,6 +32,13 @@ public:
             return default_val;
         } else {
             return atoi(val);
+        }
     }
+private:
+    explicit Environment(const std::unordered_map<std::string, std::string>* envs) {
+        if (envs) kvs = *envs;
+    }
+
     std::unordered_map<std::string, std::string> kvs;
 };
+#endif

@@ -4,25 +4,26 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-
 #include "caf/all.hpp"
 #include "caf/io/all.hpp"
 
+#include "dsps.hpp"
 #include "base.hpp"
 #include "actions.hpp"
 
+#include "utils/logging.hpp"
 using namespace std;
 using namespace std::chrono;
 using namespace caf;
 
-class node : public {
+class node{
 public:
     node(const config& cfg) {
-        cfg_ = cfg;   
+        cfg_ = cfg;       
     } 
 protected:
     template <class Actor = actor>
-    const actor& connect(actor* self,const std::string& host, uint16_t port) {
+    static const actor& connect(actor* self,const std::string& host, uint16_t port) {
         auto incoming_node = self->system().middleman().remote_actor(host,port);
         CHECK(incoming_node)<< "unable to connect to node at host: " 
                 << host << "port :" << port
@@ -47,6 +48,8 @@ protected:
     const uint16_t scheduler_port() const {
         return cfg_.scheduler_port;
     }
+mrotected:
+    actor blocking_actor_;
 private:
     config cfg_;
 };

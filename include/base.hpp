@@ -1,11 +1,17 @@
 #ifndef BASE_HPP
 #define BASE_HPP
 
+#include <string>
+#include <iostream>
+
+using namespace std;
+
 enum class node_role {
     scheduler,
     worker,
     server
 };
+
 node_role from_string(string role_string) {
     if(role_string == "SCHEDULER")
         return node_role::scheduler;
@@ -20,7 +26,8 @@ enum class block_group {
     all_servers,
     all_servers_and_workers,
     all_nodes
-}
+};
+
 struct message {
 };
 #endif

@@ -10,6 +10,7 @@
 
 #include "base.hpp"
 #include "actions.hpp"
+#include "node.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -17,12 +18,12 @@ using namespace caf;
 
 //struct for scheduler internal state
 struct scheduler_state {
-    vector<pair<actor,pair<string,uint16_t>> current_servers;
-    vector<pair<actor,pair<string,uint16_t>> current_workers;
+    vector<pair<actor,pair<string,uint16_t>>> current_servers;
+    vector<pair<actor,pair<string,uint16_t>>> current_workers;
     strong_actor_ptr blk_atr;
 };
 
-class scheduler_node : node {
+class scheduler_node : public node {
 public:
     scheduler_node(node& cfg) : node(cfg) {
         scheduler_ = actor_manager->get()->system()->spawn(scheduler_node::scheduler);
@@ -51,11 +52,11 @@ public:
                 node_role role) -> 
                     result<connect_back_atom,vector<pair<string,uint16_t>>>{
                 if(node_role == node_role::worker) {
-                    auto worker = connect(host,port);
-                    self->state().current_workers.push_back(
+                    auto worker = node::connect(host,port);
+                    self->state.current_workers.push_back(
                         make_pair(worker,make_pair(host,port)));
                     vector<pair<string,uint16_t>> server_host_and_ports;
-                    for(auto serv : self->state().current_servers) {
+                    for(auto serv : self->state.current_servers) {
                         self->request(actor_cast<actor>(serv.first),
                             infinite,connect_to_opponant_atom::value,
                             host,port);
@@ -64,8 +65,8 @@ public:
                     return {connect_back_atom::value,server_host_and_ports};
                 }
                 else if(node_role == node_role::server) {
-                    auto server = connect(host,port);
-                    self->state().current_servers.push_back(
+                    auto server = node::connect(host,port);
+                    self->state.current_servers.push_back(
                         make_pair(server,make_pair(host,port)));
                     vector<pair<string,uint16_t>> worker_host_and_ports;
                     for(auto work : self->state().current_workers) {
@@ -81,23 +82,23 @@ public:
             [=](const demand_to_block_atom& atom,const block_group& group) {
                 switch(group) {
                     case block_group::all_workers:
-                        for(auto work : self->state().current_workers) {
+                        for(auto work : self->state.current_workers) {
                             self->request(actor_cast<actor>(work.first),
                                 infinite,block_atom::value,group);
                         }
                         break;
                     case block_group::all_servers:
-                        for(auto serv : self->state().current_servers) {
+                        for(auto serv : self->state.current_servers) {
                             self->request(actor_cast<actor>(serv),
                                 infinite,block_atom::value,group);
                         }
                         break;
                     case block_group::all_server_and_workers:
-                        for(auto serv : self->state().current_servers) {
+                        for(auto serv : self->state.current_servers) {
                             self->request(actor_cast<actor>(serv),
                                 infinite,block_atom::value,group);
                         }
-                        for(auto work : self->state().current_workers) {
+                        for(auto work : self->state.current_workers) {
                             self->request(actor_cast<actor>(work),
                                 infinite,block_atom::value,group);
                         }

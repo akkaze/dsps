@@ -4,8 +4,16 @@
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <memory>
 #include "caf/all.hpp"
 #include "caf/io/all.hpp"
+
+#include "base.hpp"
+#include "internal/env.h"
+
+#include "scheduler.hpp"
+#include "worker.hpp"
+#include "server.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -16,29 +24,40 @@ using namespace caf;
         aout(this) << this->system().render(err) << endl; \
     }
 
-class config {
+class config : public actor_system_config {
 public:
   uint16_t scheduler_port = 0;
   std::string scheduler_host = "localhost";
-  node_role role;
+  string role;
 public:
-  void parse_from_env() {
-    scheduler_port = Enviroment::Get()->find("DSPS_SCHEDULER_PORT");
-    scheduler_host = Enviroment::Get()->find("DSPS_SCHEDULER_HOST");
-    role = from_string(Enviroment::Get()->find("DSPS_ROLE")); 
-  };  
-}
+  config() {
+        opt_group{custom_options_, "global"}
+        .add(node_role, "node_role", "(worker|server|scheduler)")
+        .add(scheduler_port,"scheduler_port")
+        .add(scheduler_host,"scheduler_host");
+  }
+  uint16_t scheduler_port() const {
+    return scheduler_port;
+  }
+  string scheduler_host() const {
+    return scheduler_host;
+  }
+  node_role role() const {
+    return from_string(role);
+  }
+};  
 
-int start() {
+
+void start() {
     config cfg;
-    cfg.parse_from_env();
-    if(cfg.role == node_role::scheduler)
-        std::unique_ptr scheduler(new scheduler_node(cfg)); 
-    else if(cfg.role == node_role::worker)
-        std::unique_ptr worker(new worker_node(cfg));
-    else if(cfg.role == node_role::server)
-        std::unique_ptr server(new server_node(cfg));
+    if(cfg.role() == node_role::scheduler)
+        std::unique_ptr<scheduler_node> scheduler(new scheduler_node(cfg)); 
+    else if(cfg.role() == node_role::worker)
+        std::unique_ptr<worker_node> worker(new worker_node(cfg));
+    else if(cfg.role() == node_role::server)
+        std::unique_ptr<server_node> server(new server_node(cfg));
 }
 
-int stop
+void stop() {
+}
 #endif
