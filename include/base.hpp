@@ -21,6 +21,17 @@ node_role from_string(string role_string) {
         return node_role::server;
 }
 
+string to_string(node_role role) {
+    switch(role) {
+        case node_role::scheduler:
+            return "scheduler";
+        case node_role::worker:
+            return "worker";
+        case node_role::server:
+            return "server";
+    }
+}
+
 enum class block_group {
     all_workers,
     all_servers,
