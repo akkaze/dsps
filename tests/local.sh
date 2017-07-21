@@ -14,24 +14,25 @@ shift
 arg="$@"
 
 # start the scheduler
-export DSPS_PS_ROOT_URI='127.0.0.1'
-export DSPS_PS_ROOT_PORT=8000
-export DSPS_ROLE='SCHEDULER'
-${bin} ${arg} &
+DSPS_PS_ROOT_URI='127.0.0.1'
+DSPS_PS_ROOT_PORT=8000
+${bin} --scheduler-host=${DSPS_PS_ROOT_URI} \
+    --scheduler-port=${DSPS_PS_ROOT_PORT} \
+    --node_role='scheduler' &
 
 
 # start servers
-export DSPS_ROLE='SERVER'
 for ((i=0; i<${DSPS_NUM_SERVER}; ++i)); do
-    export HEAPPROFILE=./S${i}
-    ${bin} ${arg} &
+    ${bin} --scheduler-host=${DSPS_PS_ROOT_URI} \ 
+        --scheduler-port=${DSPS_PS_ROOT_PORT} \ 
+        --node_role='server' &
 done
 
 # start workers
-export DSPS_ROLE='WORKER'
 for ((i=0; i<${DSPS_NUM_WORKER}; ++i)); do
-    export HEAPPROFILE=./W${i}
-    ${bin} ${arg} &
+    ${bin} --scheduler-host=${DSPS_PS_ROOT_URI} \ 
+        --scheduler-port=${DSPS_PS_ROOT_PORT} \ 
+        --node_role='worker' &
 done
 
 wait

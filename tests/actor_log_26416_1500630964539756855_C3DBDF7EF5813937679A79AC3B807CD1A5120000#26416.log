@@ -1,0 +1,298 @@
+1500630964539792080 caf INFO  actor0 139858271700768 caf.logger start logger.cpp:394 level = TRACE, node = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416
+1500630964536707943 caf TRACE actor0 139858271700768 caf.intrusive_ptr<caf.node_id.data>%20caf.node_id.data create_singleton node_id.cpp:145 ENTRY 
+1500630964536815439 caf TRACE actor0 139858271700768 caf.node_id.data create_singleton node_id.cpp:145 EXIT
+1500630964536826314 caf TRACE actor0 139858271700768 caf.group_manager init group_manager.cpp:434 ENTRY 
+1500630964536833077 caf TRACE actor0 139858271700768 caf.{anonymous}.local_group_module local_group_module group_manager.cpp:325 ENTRY 
+1500630964536838680 caf TRACE actor0 139858271700768 caf.{anonymous}.local_group_module local_group_module group_manager.cpp:325 EXIT
+1500630964536848761 caf TRACE actor0 139858271700768 caf.group_manager init group_manager.cpp:434 EXIT
+1500630964536868300 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 1 ; ARGS = (actor_config)
+1500630964536892110 caf TRACE actor0 139858271700768 caf.scheduled_actor launch scheduled_actor.cpp:166 ENTRY lazy = true, hide = true
+1500630964536897028 caf TRACE actor0 139858271700768 caf.scheduled_actor launch scheduled_actor.cpp:166 EXIT
+1500630964536903155 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 2 ; ARGS = (actor_config)
+1500630964536909777 caf TRACE actor0 139858271700768 caf.scheduled_actor launch scheduled_actor.cpp:166 ENTRY lazy = true, hide = true
+1500630964536913584 caf TRACE actor0 139858271700768 caf.scheduled_actor launch scheduled_actor.cpp:166 EXIT
+1500630964536923983 caf TRACE actor0 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 ENTRY 
+1500630964536934089 caf DEBUG actor0 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:52 cannot attach functor to terminated actor: call immediately
+1500630964536939073 caf TRACE actor0 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 EXIT
+1500630964536946057 caf TRACE actor0 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 ENTRY 
+1500630964536950227 caf DEBUG actor0 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:52 cannot attach functor to terminated actor: call immediately
+1500630964536954167 caf TRACE actor0 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 EXIT
+1500630964537553285 caf TRACE actor0 139858271700768 caf.scheduler.abstract_coordinator start abstract_coordinator.cpp:323 ENTRY 
+1500630964537566589 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 3 ; ARGS = (actor_config)
+1500630964537579998 caf TRACE actor0 139858271700768 caf.blocking_actor launch blocking_actor.cpp:87 ENTRY hide = true
+1500630964537629101 caf TRACE actor0 139858271700768 caf.blocking_actor launch blocking_actor.cpp:87 EXIT
+1500630964537644475 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 4 ; ARGS = (actor_config)
+1500630964537654721 caf TRACE actor0 139858271700768 caf.blocking_actor launch blocking_actor.cpp:87 ENTRY hide = true
+1500630964537709274 caf TRACE actor0 139858271700768 caf.blocking_actor launch blocking_actor.cpp:87 EXIT
+1500630964537717314 caf TRACE actor0 139858271700768 caf.scheduler.abstract_coordinator start abstract_coordinator.cpp:323 EXIT
+1500630964537730338 caf TRACE actor0 139858271700768 caf.io.middleman start middleman.cpp:253 ENTRY 
+1500630964537789480 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 5 ; ARGS = (actor_config)
+1500630964537808138 caf TRACE actor0 139858271700768 caf.io.abstract_broker launch abstract_broker.cpp:52 ENTRY lazy = false, hide = true
+1500630964537817730 caf TRACE actor0 139858271700768 caf.io.abstract_broker launch abstract_broker.cpp:52 EXIT
+1500630964537840646 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 6 ; ARGS = (actor_config, 5@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416)
+1500630964537853417 caf TRACE actor0 139858271700768 caf.scheduled_actor launch scheduled_actor.cpp:166 ENTRY lazy = false, hide = true
+1500630964537899921 caf TRACE actor0 139858271700768 caf.scheduled_actor launch scheduled_actor.cpp:166 EXIT
+1500630964537909193 caf TRACE actor0 139858271700768 caf.io.middleman start middleman.cpp:253 EXIT
+1500630964537915077 caf TRACE actor0 139858271700768 caf.group_manager start group_manager.cpp:445 ENTRY 
+1500630964537919096 caf TRACE actor0 139858271700768 caf.group_manager start group_manager.cpp:445 EXIT
+1500630964537964379 caf DEBUG actor0 139858271700768 caf.actor_system ~actor_system actor_system.cpp:276 shutdown actor system
+1500630964537975971 caf TRACE actor0 139858271700768 caf.actor_registry await_running_count_equal actor_registry.cpp:114 ENTRY expected = 0
+1500630964537982208 caf TRACE actor0 139858271700768 caf.actor_registry await_running_count_equal actor_registry.cpp:114 EXIT
+1500630964537994429 caf TRACE actor0 139858271700768 caf anon_send_exit send.hpp:86 ENTRY dest = 1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = user_shutdown
+1500630964538030031 caf TRACE actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:124 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), (exit_msg(1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964538045754 se-0001 DEBUG actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:125 SEND ; TO = 1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964538050583 se-0001 DEBUG actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:130 ACCEPT
+1500630964538055143 caf TRACE actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:124 EXIT
+1500630964538061429 caf TRACE actor0 139858271700768 caf anon_send_exit send.hpp:86 EXIT
+1500630964538068947 caf TRACE actor0 139858271700768 caf anon_send_exit send.hpp:86 ENTRY dest = 2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = user_shutdown
+1500630964538080710 caf TRACE actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:124 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), (exit_msg(2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964538094379 se-0001 DEBUG actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:125 SEND ; TO = 2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964538098679 se-0001 DEBUG actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:130 ACCEPT
+1500630964538103173 caf TRACE actor0 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:124 EXIT
+1500630964538107245 caf TRACE actor0 139858271700768 caf anon_send_exit send.hpp:86 EXIT
+1500630964538113386 caf TRACE actor0 139858271700768 caf.group_manager stop group_manager.cpp:449 ENTRY 
+1500630964538120230 caf TRACE actor0 139858271700768 caf.{anonymous}.local_group_module stop group_manager.cpp:389 ENTRY 
+1500630964538126567 caf TRACE actor0 139858271700768 caf.{anonymous}.local_group_module stop group_manager.cpp:389 EXIT
+1500630964538130928 caf TRACE actor0 139858271700768 caf.group_manager stop group_manager.cpp:449 EXIT
+1500630964538135685 caf TRACE actor0 139858271700768 caf.io.middleman stop middleman.cpp:276 ENTRY 
+1500630964538186338 caf TRACE actor1 139858247591680 caf.scheduled_actor activate scheduled_actor.cpp:503 ENTRY 
+1500630964538222008 caf TRACE actor1 139858247591680 caf.event_based_actor initialize event_based_actor.cpp:34 ENTRY subtype = caf.stateful_actor<caf.(anonymous%20namespace).spawn_serv_state,%20caf.event_based_actor>
+1500630964538232218 caf TRACE actor1 139858247591680 caf.event_based_actor make_behavior event_based_actor.cpp:48 ENTRY 
+1500630964538243291 caf TRACE actor1 139858247591680 caf.{anonymous} spawn_serv_impl actor_system.cpp:155 ENTRY 
+1500630964538248673 caf TRACE actor1 139858247591680 caf.{anonymous} spawn_serv_impl actor_system.cpp:155 EXIT
+1500630964538253345 caf TRACE actor1 139858247591680 caf.event_based_actor make_behavior event_based_actor.cpp:48 EXIT
+1500630964538257471 caf DEBUG actor1 139858247591680 caf.event_based_actor initialize event_based_actor.cpp:41 make_behavior() did return a valid behavior
+1500630964538266020 se-0001 DEBUG actor1 139858247591680 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = spawn_server ; HIDDEN = true
+1500630964538270620 caf TRACE actor1 139858247591680 caf.event_based_actor initialize event_based_actor.cpp:34 EXIT
+1500630964538278456 caf DEBUG actor1 139858247591680 caf.scheduled_actor activate scheduled_actor.cpp:524 initialized actor: name() = "spawn_server"
+1500630964538283035 caf TRACE actor1 139858247591680 caf.scheduled_actor activate scheduled_actor.cpp:503 EXIT
+1500630964538320144 caf TRACE actor1 139858247591680 caf.scheduled_actor reactivate scheduled_actor.cpp:551 ENTRY x = mailbox_element(0@invalid-node, message_id(0), (exit_msg(1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964538332679 caf TRACE actor1 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:379 ENTRY x = mailbox_element(0@invalid-node, message_id(0), (exit_msg(1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964538344031 se-0001 DEBUG actor1 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:381 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(1@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964538354014 caf DEBUG actor1 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:418 handled system message
+1500630964538358152 caf TRACE actor1 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:379 EXIT
+1500630964538365104 caf DEBUG actor1 139858247591680 caf.scheduled_actor finalize scheduled_actor.cpp:599 actor either has no behavior or has set an exit reason
+1500630964538372777 caf TRACE actor1 139858247591680 caf.stateful_actor<State,%20Base> on_exit stateful_actor.hpp:57 ENTRY 
+1500630964538376950 caf TRACE actor1 139858247591680 Base> on_exit stateful_actor.hpp:57 EXIT
+1500630964538387819 caf TRACE actor1 139858247591680 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = error(4, 'exit')
+1500630964538398090 caf TRACE actor1 139858247591680 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = error(4, 'exit')
+1500630964538409952 caf INFO  actor1 139858247591680 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 1, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = error(4, 'exit')
+1500630964538415953 caf TRACE actor1 139858247591680 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964538421495 se-0001 DEBUG actor1 139858247591680 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = error(4, 'exit')
+1500630964538425628 caf TRACE actor1 139858247591680 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964538429735 caf DEBUG actor1 139858247591680 caf.scheduled_actor reactivate scheduled_actor.cpp:561 actor finalized
+1500630964538433624 caf TRACE actor1 139858247591680 caf.scheduled_actor reactivate scheduled_actor.cpp:551 EXIT
+1500630964538453727 caf TRACE actor2 139858247591680 caf.scheduled_actor activate scheduled_actor.cpp:503 ENTRY 
+1500630964538464539 caf TRACE actor2 139858247591680 caf.event_based_actor initialize event_based_actor.cpp:34 ENTRY subtype = caf.stateful_actor<caf.(anonymous%20namespace).kvstate,%20caf.event_based_actor>
+1500630964538468965 caf TRACE actor2 139858247591680 caf.event_based_actor make_behavior event_based_actor.cpp:48 ENTRY 
+1500630964538475787 caf TRACE actor2 139858247591680 caf.{anonymous} config_serv_impl actor_system.cpp:59 ENTRY 
+1500630964538480773 caf TRACE actor2 139858247591680 caf.{anonymous} config_serv_impl actor_system.cpp:59 EXIT
+1500630964538484651 caf TRACE actor2 139858247591680 caf.event_based_actor make_behavior event_based_actor.cpp:48 EXIT
+1500630964538488459 caf DEBUG actor2 139858247591680 caf.event_based_actor initialize event_based_actor.cpp:41 make_behavior() did return a valid behavior
+1500630964538493545 se-0001 DEBUG actor2 139858247591680 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = config_server ; HIDDEN = true
+1500630964538497382 caf TRACE actor2 139858247591680 caf.event_based_actor initialize event_based_actor.cpp:34 EXIT
+1500630964538503047 caf DEBUG actor2 139858247591680 caf.scheduled_actor activate scheduled_actor.cpp:524 initialized actor: name() = "config_server"
+1500630964538506826 caf TRACE actor2 139858247591680 caf.scheduled_actor activate scheduled_actor.cpp:503 EXIT
+1500630964538518955 caf TRACE actor2 139858247591680 caf.scheduled_actor reactivate scheduled_actor.cpp:551 ENTRY x = mailbox_element(0@invalid-node, message_id(0), (exit_msg(2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964538529227 caf TRACE actor2 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:379 ENTRY x = mailbox_element(0@invalid-node, message_id(0), (exit_msg(2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964538538348 se-0001 DEBUG actor2 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:381 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(2@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964538545222 caf DEBUG actor2 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:418 handled system message
+1500630964538549515 caf TRACE actor2 139858247591680 caf.scheduled_actor consume scheduled_actor.cpp:379 EXIT
+1500630964538553455 caf DEBUG actor2 139858247591680 caf.scheduled_actor finalize scheduled_actor.cpp:599 actor either has no behavior or has set an exit reason
+1500630964538559892 caf TRACE actor2 139858247591680 caf.stateful_actor<State,%20Base> on_exit stateful_actor.hpp:57 ENTRY 
+1500630964538565657 caf TRACE actor2 139858247591680 Base> on_exit stateful_actor.hpp:57 EXIT
+1500630964538572875 caf TRACE actor2 139858247591680 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = error(4, 'exit')
+1500630964538579241 caf TRACE actor2 139858247591680 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = error(4, 'exit')
+1500630964538588514 caf INFO  actor2 139858247591680 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 2, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = error(4, 'exit')
+1500630964538592941 caf TRACE actor2 139858247591680 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964538598253 se-0001 DEBUG actor2 139858247591680 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = error(4, 'exit')
+1500630964538602271 caf TRACE actor2 139858247591680 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964538608647 caf DEBUG actor2 139858247591680 caf.scheduled_actor reactivate scheduled_actor.cpp:561 actor finalized
+1500630964538615814 caf TRACE actor2 139858247591680 caf.scheduled_actor reactivate scheduled_actor.cpp:551 EXIT
+1500630964538662401 se-0001 DEBUG actor3 139858205632256 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = timer_actor ; HIDDEN = true
+1500630964538679871 caf TRACE actor3 139858205632256 caf.blocking_actor receive_impl blocking_actor.cpp:317 ENTRY mid = message_id(0)
+1500630964538704249 se-0001 DEBUG actor4 139858195142400 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = printer_actor ; HIDDEN = true
+1500630964538718044 caf TRACE actor4 139858195142400 caf.blocking_actor receive_impl blocking_actor.cpp:317 ENTRY mid = message_id(0)
+1500630964538752358 caf TRACE actor0 139858184652544 caf.io.middleman operator() middleman.cpp:266 ENTRY 
+1500630964538762945 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer run default_multiplexer.cpp:319 ENTRY epoll()-based multiplexer
+1500630964538773872 caf DEBUG actor0 139858184652544 caf.io.network.default_multiplexer run default_multiplexer.cpp:325 epoll_wait() on  shadow_ = 1  sockets reported  presult = 1  event(s)
+1500630964538783257 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle_socket_event default_multiplexer.cpp:669 ENTRY fd = 4, mask = 1
+1500630964538792572 caf TRACE actor0 139858184652544 caf.io.network.pipe_reader handle_event default_multiplexer.cpp:1039 ENTRY op = read
+1500630964538802482 caf TRACE actor5 139858184652544 caf.scheduled_actor activate scheduled_actor.cpp:503 ENTRY 
+1500630964538816174 caf TRACE actor5 139858184652544 caf.io.broker initialize broker.cpp:37 ENTRY 
+1500630964538821433 caf TRACE actor5 139858184652544 caf.io.abstract_broker init_broker abstract_broker.cpp:220 ENTRY 
+1500630964538825816 caf TRACE actor5 139858184652544 caf.io.abstract_broker init_broker abstract_broker.cpp:220 EXIT
+1500630964538835983 caf TRACE actor5 139858184652544 caf.io.basp_broker make_behavior basp_broker.cpp:478 ENTRY system().node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416
+1500630964538842596 caf TRACE actor5 139858184652544 caf.io.basp_broker make_behavior basp_broker.cpp:478 EXIT
+1500630964538849487 caf DEBUG actor5 139858184652544 caf.io.broker initialize broker.cpp:44 make_behavior() did return a valid behavior
+1500630964538854777 caf TRACE actor5 139858184652544 caf.io.broker initialize broker.cpp:37 EXIT
+1500630964538860854 caf DEBUG actor5 139858184652544 caf.scheduled_actor activate scheduled_actor.cpp:524 initialized actor: name() = "basp_broker"
+1500630964538864585 caf TRACE actor5 139858184652544 caf.scheduled_actor activate scheduled_actor.cpp:503 EXIT
+1500630964538869780 caf TRACE actor0 139858184652544 caf.io.network.pipe_reader handle_event default_multiplexer.cpp:1039 EXIT
+1500630964538874300 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle_socket_event default_multiplexer.cpp:669 EXIT
+1500630964538881238 caf DEBUG actor0 139858184652544 caf.io.network.default_multiplexer run default_multiplexer.cpp:325 epoll_wait() on  shadow_ = 1  sockets reported  presult = 1  event(s)
+1500630964538886864 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle_socket_event default_multiplexer.cpp:669 ENTRY fd = 4, mask = 1
+1500630964538891483 caf TRACE actor0 139858184652544 caf.io.network.pipe_reader handle_event default_multiplexer.cpp:1039 ENTRY op = read
+1500630964538897206 caf TRACE actor0 139858184652544 caf.io.middleman operator() middleman.cpp:278 ENTRY 
+1500630964538902211 caf DEBUG actor0 139858184652544 caf.scheduled_actor finalize scheduled_actor.cpp:599 actor either has no behavior or has set an exit reason
+1500630964538907145 caf TRACE actor0 139858184652544 caf.stateful_actor<State,%20Base> on_exit stateful_actor.hpp:57 ENTRY 
+1500630964538922318 caf TRACE actor0 139858184652544 Base> on_exit stateful_actor.hpp:57 EXIT
+1500630964538931336 caf TRACE actor0 139858184652544 caf.io.abstract_broker cleanup abstract_broker.cpp:63 ENTRY reason = none
+1500630964538936126 caf TRACE actor0 139858184652544 caf.io.abstract_broker close_all abstract_broker.cpp:193 ENTRY 
+1500630964538940031 caf TRACE actor0 139858184652544 caf.io.abstract_broker close_all abstract_broker.cpp:193 EXIT
+1500630964538945769 caf TRACE actor0 139858184652544 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = none
+1500630964538951612 caf TRACE actor0 139858184652544 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = none
+1500630964538959808 caf INFO  actor0 139858184652544 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 5, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = none
+1500630964538966469 caf TRACE actor0 139858184652544 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964538971205 se-0001 DEBUG actor0 139858184652544 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = none
+1500630964538975079 caf TRACE actor0 139858184652544 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964538979118 caf TRACE actor0 139858184652544 caf.io.abstract_broker cleanup abstract_broker.cpp:63 EXIT
+1500630964538984628 caf TRACE actor0 139858184652544 caf.io.middleman operator() middleman.cpp:278 EXIT
+1500630964538990465 caf TRACE actor0 139858184652544 caf.io.network.pipe_reader handle_event default_multiplexer.cpp:1039 EXIT
+1500630964538994957 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle_socket_event default_multiplexer.cpp:669 EXIT
+1500630964539001394 caf DEBUG actor0 139858184652544 caf.io.network.default_multiplexer run default_multiplexer.cpp:325 epoll_wait() on  shadow_ = 1  sockets reported  presult = 1  event(s)
+1500630964539006748 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle_socket_event default_multiplexer.cpp:669 ENTRY fd = 4, mask = 1
+1500630964539011468 caf TRACE actor0 139858184652544 caf.io.network.pipe_reader handle_event default_multiplexer.cpp:1039 ENTRY op = read
+1500630964539019415 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer close_pipe default_multiplexer.cpp:663 ENTRY 
+1500630964539025937 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer del default_multiplexer.cpp:623 ENTRY op = read, fd = 4
+1500630964539034283 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer new_event default_multiplexer.hpp:323 ENTRY op = read, fd = 4, old_bf = 1
+1500630964539040012 caf DEBUG actor0 139858184652544 caf.io.network.default_multiplexer new_event default_multiplexer.hpp:348 added handler: fd = 4, op = read
+1500630964539048412 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer new_event default_multiplexer.hpp:323 EXIT
+1500630964539052751 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer del default_multiplexer.cpp:623 EXIT
+1500630964539056967 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer close_pipe default_multiplexer.cpp:663 EXIT
+1500630964539061694 caf TRACE actor0 139858184652544 caf.io.network.pipe_reader handle_event default_multiplexer.cpp:1039 EXIT
+1500630964539065762 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle_socket_event default_multiplexer.cpp:669 EXIT
+1500630964539072255 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle default_multiplexer.cpp:355 ENTRY e.fd =  e.fd = 4 , mask =  e.mask = 0
+1500630964539077205 caf DEBUG actor0 139858184652544 caf.io.network.default_multiplexer handle default_multiplexer.cpp:373 attempt to remove socket  e.fd = 4  from epoll
+1500630964539082724 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer handle default_multiplexer.cpp:355 EXIT
+1500630964539086845 caf TRACE actor0 139858184652544 caf.io.network.default_multiplexer run default_multiplexer.cpp:319 EXIT
+1500630964539091010 caf TRACE actor0 139858184652544 caf.io.middleman operator() middleman.cpp:266 EXIT
+1500630964539119615 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 7 ; ARGS = (actor_config)
+1500630964539127583 se-0001 DEBUG actor7 139858271700768 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = scoped_actor ; HIDDEN = true
+1500630964539149864 caf TRACE actor7 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:124 ENTRY *ptr = mailbox_element(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, message_id(0), (exit_msg(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(5, 'exit'))))
+1500630964539168982 se-0001 DEBUG actor7 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:125 SEND ; TO = 6@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; STAGES = [] ; CONTENT = (exit_msg(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(5, 'exit')))
+1500630964539177988 se-0001 DEBUG actor7 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:154 ACCEPT
+1500630964539185880 caf TRACE actor7 139858271700768 caf.scheduled_actor enqueue scheduled_actor.cpp:124 EXIT
+1500630964539197608 caf TRACE actor7 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 ENTRY 
+1500630964539206878 caf DEBUG actor7 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:52 cannot attach functor to terminated actor: call immediately
+1500630964539214615 caf TRACE actor7 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 EXIT
+1500630964539232444 caf TRACE actor7 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:317 ENTRY mid = message_id(0)
+1500630964539301195 caf TRACE actor6 139858174162688 caf.detail.private_thread run private_thread.cpp:40 ENTRY 
+1500630964539315419 caf TRACE actor6 139858174162688 caf.scheduled_actor activate scheduled_actor.cpp:503 ENTRY 
+1500630964539325807 caf TRACE actor6 139858174162688 caf.typed_event_based_actor<caf.typed_mpi<caf.detail.type_list<caf make_behavior middleman_actor.cpp:88 ENTRY 
+1500630964539332995 caf TRACE actor6 139858174162688 caf.io.{anonymous}.middleman_actor_impl make_behavior middleman_actor.cpp:88 EXIT
+1500630964539340538 caf DEBUG actor6 139858174162688 caf.typed_event_based_actor<%20<template-parameter-1-1>%20> initialize typed_event_based_actor.hpp:77 make_behavior() did return a valid behavior
+1500630964539348276 se-0001 DEBUG actor6 139858174162688 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = middleman_actor ; HIDDEN = true
+1500630964539354944 caf DEBUG actor6 139858174162688 caf.scheduled_actor activate scheduled_actor.cpp:524 initialized actor: name() = "middleman_actor"
+1500630964539358860 caf TRACE actor6 139858174162688 caf.scheduled_actor activate scheduled_actor.cpp:503 EXIT
+1500630964539374341 caf TRACE actor6 139858174162688 caf.scheduled_actor reactivate scheduled_actor.cpp:551 ENTRY x = mailbox_element(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, message_id(0), (exit_msg(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(5, 'exit'))))
+1500630964539386280 caf TRACE actor6 139858174162688 caf.scheduled_actor consume scheduled_actor.cpp:379 ENTRY x = mailbox_element(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, message_id(0), (exit_msg(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(5, 'exit'))))
+1500630964539409025 se-0001 DEBUG actor6 139858174162688 caf.scheduled_actor consume scheduled_actor.cpp:381 RECEIVE ; FROM = 7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; STAGES = [] ; CONTENT = (exit_msg(7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(5, 'exit')))
+1500630964539421347 caf TRACE actor6 139858174162688 caf.monitorable_actor link_impl monitorable_actor.cpp:120 ENTRY op = remove_link, other = *<unprintable>
+1500630964539427548 caf TRACE actor6 139858174162688 caf.monitorable_actor remove_link_impl monitorable_actor.cpp:186 ENTRY x = *<unprintable>
+1500630964539433901 caf TRACE actor6 139858174162688 size_t%20caf.monitorable_actor detach_impl monitorable_actor.cpp:208 ENTRY 
+1500630964539438397 caf TRACE actor6 139858174162688 size_t%20caf.monitorable_actor detach_impl monitorable_actor.cpp:208 ENTRY 
+1500630964539444872 caf DEBUG actor6 139858174162688 size_t%20caf.monitorable_actor detach_impl monitorable_actor.cpp:210 invalid ptr
+1500630964539449152 caf TRACE actor6 139858174162688 caf.monitorable_actor detach_impl monitorable_actor.cpp:208 EXIT
+1500630964539453120 caf TRACE actor6 139858174162688 caf.monitorable_actor detach_impl monitorable_actor.cpp:208 EXIT
+1500630964539457368 caf TRACE actor6 139858174162688 caf.monitorable_actor remove_link_impl monitorable_actor.cpp:186 EXIT
+1500630964539461327 caf TRACE actor6 139858174162688 caf.monitorable_actor link_impl monitorable_actor.cpp:120 EXIT
+1500630964539466032 caf DEBUG actor6 139858174162688 caf.scheduled_actor consume scheduled_actor.cpp:418 handled system message
+1500630964539470034 caf TRACE actor6 139858174162688 caf.scheduled_actor consume scheduled_actor.cpp:379 EXIT
+1500630964539474113 caf DEBUG actor6 139858174162688 caf.scheduled_actor finalize scheduled_actor.cpp:599 actor either has no behavior or has set an exit reason
+1500630964539478810 caf TRACE actor6 139858174162688 caf.io.{anonymous}.middleman_actor_impl on_exit middleman_actor.cpp:67 ENTRY 
+1500630964539490422 caf TRACE actor6 139858174162688 caf.io.{anonymous}.middleman_actor_impl on_exit middleman_actor.cpp:67 EXIT
+1500630964539501148 caf TRACE actor6 139858174162688 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = error(5, 'exit')
+1500630964539507955 caf TRACE actor6 139858174162688 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = error(5, 'exit')
+1500630964539517036 caf INFO  actor6 139858174162688 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 6, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = error(5, 'exit')
+1500630964539526326 caf TRACE actor6 139858174162688 caf.blocking_actor enqueue blocking_actor.cpp:66 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), ('waitFor'))
+1500630964539538100 se-0001 DEBUG actor6 139858174162688 caf.blocking_actor enqueue blocking_actor.cpp:67 SEND ; TO = 7@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = ('waitFor')
+1500630964539545118 se-0001 DEBUG actor6 139858174162688 caf.blocking_actor enqueue blocking_actor.cpp:78 ACCEPT
+1500630964539549382 caf TRACE actor6 139858174162688 caf.blocking_actor enqueue blocking_actor.cpp:66 EXIT
+1500630964539553784 caf TRACE actor6 139858174162688 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964539559446 se-0001 DEBUG actor6 139858174162688 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = error(5, 'exit')
+1500630964539563081 caf TRACE actor6 139858174162688 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964539566792 caf DEBUG actor6 139858174162688 caf.scheduled_actor reactivate scheduled_actor.cpp:561 actor finalized
+1500630964539570761 caf TRACE actor6 139858174162688 caf.scheduled_actor reactivate scheduled_actor.cpp:551 EXIT
+1500630964539579215 caf TRACE actor6 139858174162688 caf.detail.private_thread run private_thread.cpp:40 EXIT
+1500630964539605328 se-0001 DEBUG actor7 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:347 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = ('waitFor')
+1500630964539617566 caf TRACE actor7 139858271700768 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 ENTRY x = <empty-message>
+1500630964539626273 caf DEBUG actor7 139858271700768 caf.detail.default_invoke_result_visitor<Self> delegate default_invoke_result_visitor.hpp:83 suppress response message: invalid response promise
+1500630964539631936 caf TRACE actor7 139858271700768 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 EXIT
+1500630964539637938 caf TRACE actor7 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:317 EXIT
+1500630964539652122 caf TRACE actor7 139858271700768 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = none
+1500630964539658306 caf TRACE actor7 139858271700768 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = none
+1500630964539666700 caf INFO  actor7 139858271700768 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 7, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = none
+1500630964539670506 caf TRACE actor7 139858271700768 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964539675740 se-0001 DEBUG actor7 139858271700768 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = none
+1500630964539679813 caf TRACE actor7 139858271700768 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964539685761 caf TRACE actor0 139858271700768 caf.io.middleman stop middleman.cpp:276 EXIT
+1500630964540568520 caf TRACE actor0 139858271700768 caf.scheduler.abstract_coordinator stop_actors abstract_coordinator.cpp:343 ENTRY 
+1500630964540589402 se-0001 DEBUG actor0 139858271700768 caf make_actor make_actor.hpp:37 SPAWN ; ID = 8 ; ARGS = (actor_config)
+1500630964540598931 se-0001 DEBUG actor8 139858271700768 caf.local_actor initialize local_actor.cpp:177 INIT ; NAME = scoped_actor ; HIDDEN = true
+1500630964540607459 caf TRACE actor8 139858271700768 caf anon_send_exit send.hpp:86 ENTRY dest = 3@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = user_shutdown
+1500630964540620976 caf TRACE actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:66 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), (exit_msg(3@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964540632331 se-0001 DEBUG actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:67 SEND ; TO = 3@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(3@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964540638839 se-0001 DEBUG actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:78 ACCEPT
+1500630964540642783 caf TRACE actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:66 EXIT
+1500630964540646740 caf TRACE actor8 139858271700768 caf anon_send_exit send.hpp:86 EXIT
+1500630964540653352 caf TRACE actor8 139858271700768 caf anon_send_exit send.hpp:86 ENTRY dest = 4@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = user_shutdown
+1500630964540663274 caf TRACE actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:66 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), (exit_msg(4@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit'))))
+1500630964540673544 se-0001 DEBUG actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:67 SEND ; TO = 4@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(4@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964540679094 se-0001 DEBUG actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:78 ACCEPT
+1500630964540682805 caf TRACE actor8 139858271700768 caf.blocking_actor enqueue blocking_actor.cpp:66 EXIT
+1500630964540686341 caf TRACE actor8 139858271700768 caf anon_send_exit send.hpp:86 EXIT
+1500630964540691579 caf TRACE actor8 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 ENTRY 
+1500630964540695882 caf DEBUG actor8 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:52 cannot attach functor to terminated actor: call immediately
+1500630964540699767 caf TRACE actor8 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 EXIT
+1500630964540703858 caf TRACE actor8 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 ENTRY 
+1500630964540707695 caf DEBUG actor8 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:52 cannot attach functor to terminated actor: call immediately
+1500630964540711180 caf TRACE actor8 139858271700768 caf.monitorable_actor attach monitorable_actor.cpp:41 EXIT
+1500630964540716926 caf TRACE actor8 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:317 ENTRY mid = message_id(0)
+1500630964540742780 se-0001 DEBUG actor3 139858205632256 caf.blocking_actor receive_impl blocking_actor.cpp:347 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(3@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964540750754 caf TRACE actor3 139858205632256 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 ENTRY x = <empty-message>
+1500630964540760332 caf DEBUG actor3 139858205632256 caf.detail.default_invoke_result_visitor<Self> delegate default_invoke_result_visitor.hpp:83 suppress response message: invalid response promise
+1500630964540765360 caf TRACE actor3 139858205632256 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 EXIT
+1500630964540771858 caf TRACE actor3 139858205632256 caf.blocking_actor receive_impl blocking_actor.cpp:317 EXIT
+1500630964540781248 caf TRACE actor3 139858205632256 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = error(4, 'exit')
+1500630964540788189 caf TRACE actor3 139858205632256 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = error(4, 'exit')
+1500630964540797138 caf INFO  actor3 139858205632256 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 3, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = error(4, 'exit')
+1500630964540804946 caf TRACE actor3 139858205632256 caf.blocking_actor enqueue blocking_actor.cpp:66 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), ('waitFor'))
+1500630964540813149 se-0001 DEBUG actor3 139858205632256 caf.blocking_actor enqueue blocking_actor.cpp:67 SEND ; TO = 8@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = ('waitFor')
+1500630964540819797 se-0001 DEBUG actor3 139858205632256 caf.blocking_actor enqueue blocking_actor.cpp:78 ACCEPT
+1500630964540824073 caf TRACE actor3 139858205632256 caf.blocking_actor enqueue blocking_actor.cpp:66 EXIT
+1500630964540828385 caf TRACE actor3 139858205632256 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964540833812 se-0001 DEBUG actor3 139858205632256 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = error(4, 'exit')
+1500630964540841034 caf TRACE actor3 139858205632256 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964540883769 se-0001 DEBUG actor8 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:347 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = ('waitFor')
+1500630964540892396 caf TRACE actor8 139858271700768 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 ENTRY x = <empty-message>
+1500630964540897146 caf DEBUG actor8 139858271700768 caf.detail.default_invoke_result_visitor<Self> delegate default_invoke_result_visitor.hpp:83 suppress response message: invalid response promise
+1500630964540901292 caf TRACE actor8 139858271700768 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 EXIT
+1500630964540919306 se-0001 DEBUG actor4 139858195142400 caf.blocking_actor receive_impl blocking_actor.cpp:347 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = (exit_msg(4@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, error(4, 'exit')))
+1500630964540925408 caf TRACE actor4 139858195142400 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 ENTRY x = <empty-message>
+1500630964540930146 caf DEBUG actor4 139858195142400 caf.detail.default_invoke_result_visitor<Self> delegate default_invoke_result_visitor.hpp:83 suppress response message: invalid response promise
+1500630964540934454 caf TRACE actor4 139858195142400 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 EXIT
+1500630964540939436 caf TRACE actor4 139858195142400 caf.blocking_actor receive_impl blocking_actor.cpp:317 EXIT
+1500630964540948682 caf TRACE actor4 139858195142400 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = error(4, 'exit')
+1500630964540955230 caf TRACE actor4 139858195142400 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = error(4, 'exit')
+1500630964540964164 caf INFO  actor4 139858195142400 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 4, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = error(4, 'exit')
+1500630964540971009 caf TRACE actor4 139858195142400 caf.blocking_actor enqueue blocking_actor.cpp:66 ENTRY *ptr = mailbox_element(0@invalid-node, message_id(0), ('waitFor'))
+1500630964540978943 se-0001 DEBUG actor4 139858195142400 caf.blocking_actor enqueue blocking_actor.cpp:67 SEND ; TO = 8@C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416 ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = ('waitFor')
+1500630964540985417 se-0001 DEBUG actor4 139858195142400 caf.blocking_actor enqueue blocking_actor.cpp:78 ACCEPT
+1500630964540989598 caf TRACE actor4 139858195142400 caf.blocking_actor enqueue blocking_actor.cpp:66 EXIT
+1500630964540993746 caf TRACE actor4 139858195142400 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964540999141 se-0001 DEBUG actor4 139858195142400 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = error(4, 'exit')
+1500630964541002854 caf TRACE actor4 139858195142400 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964541051178 se-0001 DEBUG actor8 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:347 RECEIVE ; FROM = 0@invalid-node ; STAGES = [] ; CONTENT = ('waitFor')
+1500630964541059543 caf TRACE actor8 139858271700768 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 ENTRY x = <empty-message>
+1500630964541064293 caf DEBUG actor8 139858271700768 caf.detail.default_invoke_result_visitor<Self> delegate default_invoke_result_visitor.hpp:83 suppress response message: invalid response promise
+1500630964541068597 caf TRACE actor8 139858271700768 caf.detail.default_invoke_result_visitor<Self> operator() default_invoke_result_visitor.hpp:51 EXIT
+1500630964541073616 caf TRACE actor8 139858271700768 caf.blocking_actor receive_impl blocking_actor.cpp:317 EXIT
+1500630964541080755 caf TRACE actor8 139858271700768 caf.local_actor cleanup local_actor.cpp:181 ENTRY fail_state = none
+1500630964541086419 caf TRACE actor8 139858271700768 caf.monitorable_actor cleanup monitorable_actor.cpp:64 ENTRY reason = none
+1500630964541094565 caf INFO  actor8 139858271700768 caf.monitorable_actor cleanup monitorable_actor.cpp:81 cleanup id() = 8, node() = C3DBDF7EF5813937679A79AC3B807CD1A5120000#26416, reason = none
+1500630964541098557 caf TRACE actor8 139858271700768 caf.monitorable_actor cleanup monitorable_actor.cpp:64 EXIT
+1500630964541102471 se-0001 DEBUG actor8 139858271700768 caf.local_actor cleanup local_actor.cpp:189 TERMINATE ; REASON = none
+1500630964541105918 caf TRACE actor8 139858271700768 caf.local_actor cleanup local_actor.cpp:181 EXIT
+1500630964541115524 caf TRACE actor0 139858271700768 caf.scheduler.abstract_coordinator stop_actors abstract_coordinator.cpp:343 EXIT
+1500630964541340111 caf INFO  actor0 139858271700768 caf.logger stop logger.cpp:447 EOF
