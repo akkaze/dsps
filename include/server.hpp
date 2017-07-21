@@ -20,7 +20,7 @@ using namespace caf;
 
 class server_node : public working_node { 
 public:
-    server_node(config& cfg) : working_node(cfg) {
+    server_node(std::shared_ptr<config>& cfg) : working_node(cfg) {
     }
 private:
 }; 

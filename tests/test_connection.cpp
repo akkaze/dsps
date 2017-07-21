@@ -1,6 +1,7 @@
 #include "dsps.hpp"
 
 int main(int argc,char **argv) {
-    start();
+    start(argc,argv);
+    stop();
     return 0;
 }

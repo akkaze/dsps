@@ -16,7 +16,6 @@
 #include "actor_manager.hpp"
 
 using namespace std;
-using namespace std::chrono;
 using namespace caf;
 
 //struct for scheduler internal state
@@ -28,7 +27,7 @@ struct scheduler_state {
 
 class scheduler_node : public node {
 public:
-    scheduler_node(node& cfg) : node(cfg) {
+    scheduler_node(shared_ptr<config>& cfg) : node(cfg) {
         auto scheduler = actor_manager::get()->system()->spawn(
             scheduler_node::scheduler_bhvr);
         auto scheduler_port = this->scheduler_port();
@@ -43,16 +42,16 @@ public:
     }
 public:
     static behavior scheduler_bhvr(stateful_actor<scheduler_state>* self) {
-        message_handler routines = scheduler_routines(self);
+        message_handler routines = scheduler_node::scheduler_routines(self);
         return routines;
     }
-    message_handler scheduler_routines(stateful_actor<scheduler_state>* self) {
+    static message_handler scheduler_routines(stateful_actor<scheduler_state>* self) {
        return {
             [=](const connect_to_opponent_atom& atom,
                 std::string host,uint16_t port,
                 node_role role) ->
                     result<connect_back_atom,vector<pair<string,uint16_t>>>{
-                if(node_role == node_role::worker) {
+                if(role == node_role::worker) {
                     auto worker = node::connect(host,port);
                     self->state.current_workers.push_back(
                         make_pair(worker,make_pair(host,port)));
@@ -65,12 +64,12 @@ public:
                     }
                     return {connect_back_atom::value,server_host_and_ports};
                 }
-                else if(node_role == node_role::server) {
+                else if(role == node_role::server) {
                     auto server = node::connect(host,port);
                     self->state.current_servers.push_back(
                         make_pair(server,make_pair(host,port)));
                     vector<pair<string,uint16_t>> worker_host_and_ports;
-                    for(auto work : self->state().current_workers) {
+                    for(auto work : self->state.current_workers) {
                         self->request(actor_cast<actor>(work.first),
                             infinite,connect_to_opponent_atom::value,
                             host,port);

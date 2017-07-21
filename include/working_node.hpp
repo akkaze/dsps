@@ -22,7 +22,7 @@ struct working_node_state {
 
 class working_node:public node {
 public:
-    working_node(const config& cfg) : node(cfg) {
+    working_node(const shared_ptr<config>& cfg) : node(cfg) {
         auto working_actor = actor_manager::get()->system()->spawn(
             working_node::working_node_bhvr);
         //publish worker on the internet through middleman
@@ -32,7 +32,7 @@ public:
         auto scheduler_port = this->scheduler_port();
         auto localhost = this->localhost();
         auto bound_port = this->bound_port();
-        auto role = this->node_role(); 
+        auto role = this->role(); 
         anon_send(working_actor,connect_atom::value,
             scheduler_host,scheduler_port,
             localhost,bound_port,role);
@@ -43,7 +43,7 @@ protected:
         message_handler routines = working_node_routines(self);
         return routines;
     }
-    message_handler working_node_routines(
+    static message_handler working_node_routines(
         stateful_actor<working_node_state>* self) {
            return {
             [=](connect_atom atom,
@@ -51,7 +51,6 @@ protected:
                 string local_host,uint16_t bound_port,
                 node_role role) {
                 auto scheduler = connect(
-                    reinterpret_cast<actor*>(self),
                     scheduler_host,scheduler_port);
                 self->state.scheduler = scheduler;
                 self->request(actor_cast<actor>(scheduler),
@@ -62,8 +61,7 @@ protected:
             //connect to incoming oppoeant node
            [=](connect_to_opponent_atom atom,
                const string& host,uint16_t port) {
-                auto incoming_node = node::connect(
-                    reinterpret_cast<actor*>(self),host,port);
+                auto incoming_node = node::connect(host,port);
                     self->state.opponent_nodes.push_back(incoming_node);
             },
             //connect to existing opponent nodes      
@@ -71,7 +69,6 @@ protected:
                vector<pair<string,uint16_t>> server_host_and_ports) {
                 for(auto server_host_and_port : server_host_and_ports) {
                     auto incoming_node = node::connect(
-                    reinterpret_cast<actor*>(self),
                     server_host_and_port.first,
                     server_host_and_port.second);
                 }

@@ -16,10 +16,10 @@ public:
   string role_;
 public:
   config() {
-        //opt_group{custom_options_, "global"}
-        //.add(node_role, "node_role", "(worker|server|scheduler)")
-        //.add(scheduler_port,"scheduler_port")
-        //.add(scheduler_host,"scheduler_host");
+        opt_group{custom_options_, "global"}
+        .add(role_, "node_role", "(worker|server|scheduler)")
+        .add(scheduler_port_,"scheduler_port")
+        .add(scheduler_host_,"scheduler_host");
   }
   uint16_t scheduler_port() const {
     return scheduler_port_;

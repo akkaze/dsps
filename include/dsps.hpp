@@ -21,13 +21,14 @@ using namespace caf;
 //    [&](error& err) {  \
 //        aout(this) << this->system().render(err) << endl; \
 //    }
-void start() {
-    config cfg;
-    if(cfg.role() == node_role::scheduler)
+void start(size_t argc,char** argv) {
+    actor_manager::get()->init(argc,argv);
+    shared_ptr<config> cfg = actor_manager::get()->cfg();
+    if(cfg->role() == node_role::scheduler)
         std::unique_ptr<scheduler_node> scheduler(new scheduler_node(cfg)); 
-    else if(cfg.role() == node_role::worker)
+    else if(cfg->role() == node_role::worker)
         std::unique_ptr<worker_node> worker(new worker_node(cfg));
-    else if(cfg.role() == node_role::server)
+    else if(cfg->role() == node_role::server)
         std::unique_ptr<server_node> server(new server_node(cfg));
 }
 

@@ -24,9 +24,9 @@ public:
     node(const std::shared_ptr<config>& cfg) {
         cfg_ = cfg;       
     } 
-protected:
+public:
     template <class Actor = actor>
-    static const Actor& connect(Actor* self,const std::string& host, uint16_t port) {
+    static const Actor& connect(const std::string& host, uint16_t port) {
         auto incoming_node = actor_manager::get()->system()
             ->middleman().remote_actor(host,port);
         CHECK(incoming_node)<< "unable to connect to node at host: " 
@@ -37,7 +37,7 @@ protected:
     template <class Actor = actor>
     void publish(const Actor& self) {
         auto expected_port = actor_manager::get()->system()
-            ->middleman().publish(*self,0);
+            ->middleman().publish(self,0);
         CHECK(expected_port) << actor_manager::get()->system()
             ->render(expected_port.error());
         bound_port_ = *expected_port;

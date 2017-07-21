@@ -27,7 +27,7 @@ class message_t;
 class messager;
 class worker_node : public working_node { 
 public:
-    worker_node(config& cfg) : working_node(cfg) {
+    worker_node(std::shared_ptr<config>& cfg) : working_node(cfg) {
     }
     void push(const message_t& msg) {
         messager_->send(msg);        
