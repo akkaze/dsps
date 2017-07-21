@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <chrono>
 
 #include "caf/all.hpp"
 #include "caf/io/all.hpp"
@@ -16,7 +15,6 @@
 
 #include "actor_manager.hpp"
 using namespace std;
-using namespace std::chrono;
 using namespace caf;
 
 

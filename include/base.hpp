@@ -28,6 +28,6 @@ enum class block_group {
     all_nodes
 };
 
-struct message {
+struct message_t {
 };
 #endif
