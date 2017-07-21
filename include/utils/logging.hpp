@@ -7,13 +7,6 @@
 #include <vector>
 #include <stdexcept>
 
-namespace dsps {
-/*! \brief taken from DMLC directly */
-
-/*!
-* \brief exception class that will be thrown by
-*  default logger if DMLC_LOG_FATAL_THROW == 1
-*/
 struct Error : public std::runtime_error {
 	/*!
 	* \brief constructor
@@ -21,7 +14,6 @@ struct Error : public std::runtime_error {
 	*/
 	explicit Error(const std::string &s) : std::runtime_error(s) {}
 };
-}  // namespace dmlc
 
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #define noexcept(a)
@@ -30,11 +22,8 @@ struct Error : public std::runtime_error {
 #if DMLC_USE_GLOG
 #include <glog/logging.h>
 
-namespace dsps {
-/*! \brief taken from DMLC directly */
 inline void InitLogging(const char* argv0) {
 	google::InitGoogleLogging(argv0);
-}
 }  // namespace dmlc
 
 #else
@@ -48,15 +37,13 @@ inline void InitLogging(const char* argv0) {
 #pragma warning(disable : 4722)
 #endif
 
-namespace dsps {
 inline void InitLogging(const char* argv0) {
 	// DO NOTHING
 }
-
 // Always-on checking
 #define CHECK(x)                                           \
 if (!(x))                                                \
-mlite::LogMessageFatal(__FILE__, __LINE__).stream() << "Check "  \
+LogMessageFatal(__FILE__, __LINE__).stream() << "Check "  \
     "failed: " #x << ' '
 #define CHECK_LT(x, y) CHECK((x) < (y))
 #define CHECK_GT(x, y) CHECK((x) > (y))
@@ -68,7 +55,7 @@ mlite::LogMessageFatal(__FILE__, __LINE__).stream() << "Check "  \
 #define CHECK_FALSE(x) CHECK((x) == false)
 #define CHECK_FLOAT_EQ(x, y, TOL) CHECK(abs((x) - (y)) <= TOL)
 #define CHECK_NOTNULL(x) \
-((x) == NULL ? mlite::LogMessageFatal(__FILE__, __LINE__).stream() << "Check  notnull: "  #x << ' ', (x) : (x)) // NOLINT(*)
+((x) == NULL ? LogMessageFatal(__FILE__, __LINE__).stream() << "Check  notnull: "  #x << ' ', (x) : (x)) // NOLINT(*)
 // Debug-only checking.
 #ifdef NDEBUG
 #define DCHECK(x) \
@@ -95,10 +82,10 @@ while (false) CHECK((x) != (y))
 #define DCHECK_NE(x, y) CHECK((x) != (y))
 #endif  // NDEBUG
 
-#define LOG_INFO mlite::LogMessage(__FILE__, __LINE__)
+#define LOG_INFO LogMessage(__FILE__, __LINE__)
 #define LOG_ERROR LOG_INFO
 #define LOG_WARNING LOG_INFO
-#define LOG_FATAL mlite::LogMessageFatal(__FILE__, __LINE__)
+#define LOG_FATAL LogMessageFatal(__FILE__, __LINE__)
 #define LOG_QFATAL LOG_FATAL
 
 // Poor man version of VLOG
@@ -107,7 +94,7 @@ while (false) CHECK((x) != (y))
 #define LOG(severity) LOG_##severity.stream()
 #define LG LOG_INFO.stream()
 #define LOG_IF(severity, condition) \
-!(condition) ? (void)0 : dmlc::LogMessageVoidify() & LOG(severity)
+!(condition) ? (void)0 : LogMessageVoidify() & LOG(severity)
 
 #ifdef NDEBUG
 #define LOG_DFATAL LOG_ERROR
@@ -219,7 +206,6 @@ public:
 	void operator&(std::ostream&) {}
 };
 
-}  // namespace dmlc
 
 #endif
 #endif

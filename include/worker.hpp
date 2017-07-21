@@ -11,6 +11,8 @@
 #include "base.hpp"
 #include "actions.hpp"
 #include "node.hpp"
+
+#include "actor_manager.hpp"
 using namespace std;
 using namespace std::chrono;
 using namespace caf;
@@ -30,8 +32,9 @@ public:
         worker_ = actor_manager::get()->system()->spawn(worker_node::worker);
         //publish worker on the internet through middleman
         this->publish(worker_); 
-        localhost_ = get_local_ip();
-        anon_send(worker_,connect_atom::value);
+        auto scheduler_host = this->scheduler_host();
+        auto scheduler_port = this->scheduler_port(); 
+        anon_send(worker_,connect_atom::value,scheduler_host,scheduler_port);
     }
     void push(const message& msg) {
         messenger_->send(msg);        
@@ -49,51 +52,7 @@ public:
             [&](const error& err) {
                 aout(blk_atr)  << system.render(err) << endl;
             }
-    }
-    static void worker(stateful_actor<worker_state>* self) {
-        return {
-            [=](connect_atom atom) {
-                auto scheduler_host = this->scheduler_host();
-                auto scheduler_port = this->scheduler_port();
-                auto scheduler = connect(
-                    reinterpret_cast<actor*>(self),
-                    host,port);
-                self->state.scheduler = scheduler;
-                self->request(actor_cast<actor>(scheduler),
-                    infinite,connect_to_opponant_atom::value,
-                    localhost_,bound_port_,
-                    node_role::worker
-                    );
-            },
-            //connect to registering server
-            [=](connect_to_opponant_atom atom,
-                const string& host,uint16_t port) {
-                auto incoming_node = node::connect(
-                    reinterpret_cast<actor*>(self),
-                    host,port);
-                self->state.current_servers.push_back(incoming_node);                      
-            },
-            //connect to existing servers
-            [=](connect_back_atom atom,
-                vector<pair<string,uint16_t>> server_host_and_ports) {
-                for(auto server_host_and_port : server_host_and_ports) {
-                    auto incoming_node = node::connect(
-                    reinterpret_cast<actor*>(self),
-                    server_host_and_port.fist,
-                    server_host_and_port.second);
-                }
-            },
-            [=](block_atom atom,const block_group& group) {
-                auto sender = self->current_sender();
-                self->state.blk_atr = sender;
-                self->request(self->state.scheduler,
-                    infinite,block_atom::value,group);    
-            }, 
-            [=](continue_atom atom) {
-                self->request(actor_cast<actor>(self->state.blk_atr),
-                    infinite,continue_atom::value); 
-            }
-        };      
+        );
     }
 private:
     messager messager_;

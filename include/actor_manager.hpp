@@ -9,9 +9,6 @@ public:
     inline actor_system system() {
         return system_;
     }
-    static inline std::shared_ptr<actor_manager> _get_shared_ref() {
-        return _get_shared_ref();
-    }
 private:
     explicit actor_manager() {
         actor_system_config config;
@@ -23,5 +20,5 @@ private:
         return inst_ptr;
     }
     std::shared_ptr<actor_system> system_;
-}
+};
 #endif

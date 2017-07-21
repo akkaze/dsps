@@ -16,7 +16,12 @@ using namespace std;
 using namespace std::chrono;
 using namespace caf;
 
-class node{
+struct working_node_state {
+    actor scheduler;
+    vector<actor> opponant_working_node;
+    strong_actor_ptr blk_atr;
+};
+class node {
 public:
     node(const config& cfg) {
         cfg_ = cfg;       
@@ -36,6 +41,18 @@ protected:
         CHECK(expected_port) << self->system().render(expected_port.error());
         return *expected_port;
     }
+    void ask_for_blocking(const block_group& group) {
+        scoped_actor blk_atr{actor_manager::get()->system()};
+        blk_atr->request(server_,infinite,block_atom::value,group);
+        blk_atr->receive(
+            [&](const continue_atom ){
+                aout(blk_atr) << "continue" << endl;
+            },
+            [&](const error& err) {
+                aout(blk_atr)  << blk_atr->system.render(err) << endl;
+            }
+        );
+    }
     const node_role& role() const {
         return cfg_.role;
     }
@@ -48,8 +65,42 @@ protected:
     const uint16_t scheduler_port() const {
         return cfg_.scheduler_port;
     }
-mrotected:
-    actor blocking_actor_;
+protected:
+   message_hanlder working_node_routines(
+        stateful_actor<working_node_state>* self) {
+           [=](connect_atom atom,
+                string scheduler_host,uint16_t scheduler_port,
+                string local_host,uint16_t bound_port,
+                node_role role) {
+                auto scheduler = connect(
+                    reinterpret_cast<actor*>(self),
+                    scheduler_host,scheduler_port);
+                self->state.scheduler = scheduler;
+                self->request(actor_cast<actor>(scheduler),
+                    infinite,connect_to_opponant_atom::value,
+                    local_host,bound_port,role
+                    );
+            },
+            //connect to incoming opponant node
+            [=](connect_to_opponant_atom atom,
+                const string& host,uint16_t port) {
+                auto incoming_node = node::connect(
+                    reinterpret_cast<actor*>(self),
+                    host,port);
+                self->state.opponant_nodes.push_back(incoming_node);
+            },
+            //connct to existing nodes
+            [=](connect_back_atom atom,
+                vector<pair<string,uint16_t>> server_host_and_ports) {
+                for(auto server_host_and_port : server_host_and_ports) {
+                    auto incoming_node = node::connect(
+                    reinterpret_cast<actor*>(self),
+                    server_host_and_port.fist,
+                    server_host_and_port.second);
+                }
+            }
+        };
+   }
 private:
     config cfg_;
 };

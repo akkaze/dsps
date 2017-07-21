@@ -26,15 +26,15 @@ using namespace caf;
 
 class config : public actor_system_config {
 public:
-  uint16_t scheduler_port = 0;
-  std::string scheduler_host = "localhost";
-  string role;
+  uint16_t scheduler_port_ = 0;
+  std::string scheduler_host_ = "localhost";
+  string role_;
 public:
   config() {
-        opt_group{custom_options_, "global"}
-        .add(node_role, "node_role", "(worker|server|scheduler)")
-        .add(scheduler_port,"scheduler_port")
-        .add(scheduler_host,"scheduler_host");
+        //opt_group{custom_options_, "global"}
+        //.add(node_role, "node_role", "(worker|server|scheduler)")
+        //.add(scheduler_port,"scheduler_port")
+        //.add(scheduler_host,"scheduler_host");
   }
   uint16_t scheduler_port() const {
     return scheduler_port;
