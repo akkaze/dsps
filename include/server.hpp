@@ -12,22 +12,18 @@
 #include "actions.hpp"
 #include "node.hpp"
 
+#include "working_node.hpp"
+
 #include "actor_manager.hpp"
 using namespace std;
 using namespace std::chrono;
 using namespace caf;
 
 
-class server_node : public node { 
+class server_node : public working_node { 
 public:
-    server_node(config& cfg) : node(cfg) {
-        server_ = actor_manager->get()->system()->spawn(server_node::server);
-        uint16_t bound_port = this->publish(server_,0);
-        auto scheduler_host = this->scheduler_host();
-        auto scheduler_port = this->scheduler_port();
-        anon_send(server,connect_atom::value,scheduler_host,scheduler_port);
+    server_node(config& cfg) : working_node(cfg) {
     }
 private:
-    actor server_;    
 }; 
 #endif

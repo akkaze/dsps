@@ -16,11 +16,6 @@ using namespace std;
 using namespace std::chrono;
 using namespace caf;
 
-struct working_node_state {
-    actor scheduler;
-    vector<actor> opponant_working_node;
-    strong_actor_ptr blk_atr;
-};
 class node {
 public:
     node(const config& cfg) {
@@ -36,14 +31,15 @@ protected:
         return *incoming_node;
     }
     template <class Actor = actor>
-    const uint16_t& publish(const actor& self) {
+    void publish(const actor& self) {
         auto expected_port = self.system().middleman().publish(*self,0);
         CHECK(expected_port) << self->system().render(expected_port.error());
-        return *expected_port;
+        bound_port_ = *expected_port;
+        local_host_ = get_local_ip();
     }
     void ask_for_blocking(const block_group& group) {
         scoped_actor blk_atr{actor_manager::get()->system()};
-        blk_atr->request(server_,infinite,block_atom::value,group);
+        blk_atr->request(working_acotr_,infinite,block_atom::value,group);
         blk_atr->receive(
             [&](const continue_atom ){
                 aout(blk_atr) << "continue" << endl;
@@ -62,8 +58,17 @@ protected:
     const std::string& scheduler_host() const {
         return cfg_.scheduler_host;
     }
-    const uint16_t scheduler_port() const {
+    const uint16_t& scheduler_port() const {
         return cfg_.scheduler_port;
+    }
+    const uint16_t& bound_port() const {
+        return bound_port_;
+    }
+    const string& localhost() const {
+        return localhost_;
+    }
+    void set_working_actor(actor& working_actor) {
+        working_actor_ = working_actor;
     }
 protected:
    message_hanlder working_node_routines(
@@ -103,5 +108,8 @@ protected:
    }
 private:
     config cfg_;
+    actor working_actor_;
+    uint16_t bound_port_;
+    uint16_t local_host_;
 };
 #endif

@@ -28,31 +28,27 @@ struct scheduler_state {
 class scheduler_node : public node {
 public:
     scheduler_node(node& cfg) : node(cfg) {
-        scheduler_ = actor_manager->get()->system()->spawn(scheduler_node::scheduler);
-        this->publish(scheduler_,cfg.scheduler_port); 
+        auto scheduler = actor_manager->get()->system()->spawn(
+            scheduler_node::scheduler_bhvr);
+        auto scheduler_port = this->scheduler_port();
+        this->set_working_actor(scheduler);
+        this->publish(scheduler,scheduler_port); 
     }
     void demand_to_block(const block_group& group) {
         scoped_actor blocking_actor{actor_manager->get()->system()};
         blocking_actor->request(schedluer_,infinite,
             demand_to_block_atom::value,group);
     }
-    void ask_for_blocking(const block_group& group) {
-        scoped_actor blk_atr{actor_manager::get()->system()};
-        blk_atr->request(scheduler_,infinite,block_atom::value,group);
-        blk_atr->receive(
-            [&](const continue_atom ){
-                aout(blk_atr) << "continue" << endl;
-            },
-            [&](const error& err) {
-                aout(blk_atr)  << system.render(err) << endl;
-            }
-        );
+protect:
+    static behavior scheduler_bhvr(stateful_actor<scheduler_state>* self) {
+        message_handler routines = scheduler_routines(self);
+        return routines;
     }
-    static behavior scheduler(stateful_actor<scheduler_state>* self) {
+    message_handler scheduler_routines(stateful_actor<scheduler_state>* self) {
        return {
             [=](const connect_to_opponant_atom& atom,
                 std::string host,uint16_t port,
-                node_role role) -> 
+                node_role role) ->
                     result<connect_back_atom,vector<pair<string,uint16_t>>>{
                 if(node_role == node_role::worker) {
                     auto worker = node::connect(host,port);
@@ -64,7 +60,7 @@ public:
                             infinite,connect_to_opponant_atom::value,
                             host,port);
                         server_host_and_ports.push_back(serv.second);
-                    } 
+                    }
                     return {connect_back_atom::value,server_host_and_ports};
                 }
                 else if(node_role == node_role::server) {
@@ -78,10 +74,10 @@ public:
                             host,port);
                         worker_host_and_ports.push_back(work.second);
                     }
-                    return {connect_back_atom::value,worker_host_and_ports}; 
-                } 
-                 
-            },
+                    return {connect_back_atom::value,worker_host_and_ports};
+                }
+
+            }
         };
     }
 private:
