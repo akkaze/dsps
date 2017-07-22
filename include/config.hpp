@@ -16,6 +16,7 @@ public:
   string role_;
 public:
   config() {
+      add_message_type<node_role>("node_role");
         opt_group{custom_options_, "global"}
         .add(role_, "node_role", "(worker|server|scheduler)")
         .add(scheduler_port_,"scheduler_port","scheduler_port")

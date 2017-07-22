@@ -27,20 +27,23 @@ public:
             working_node::working_node_bhvr);
         //publish worker on the internet through middleman
         this->publish(working_actor);
+        LOG(INFO) << "successfully publish new " << to_string(this->role())
+            << " at " << this->bound_port();
         this->set_working_actor(working_actor);
-        auto scheduler_host = this->scheduler_host();
-        auto scheduler_port = this->scheduler_port();
-        auto localhost = this->localhost();
-        auto bound_port = this->bound_port();
-        auto role = this->role(); 
+        string scheduler_host = this->scheduler_host();
+        uint16_t scheduler_port = this->scheduler_port();
+        string localhost = this->localhost();
+        uint16_t bound_port = this->bound_port();
+        node_role role = this->role(); 
         anon_send(working_actor,connect_atom::value,
             scheduler_host,scheduler_port,
             localhost,bound_port,role);
+        
     }
-protected:
+public:
     static behavior working_node_bhvr(
         stateful_actor<working_node_state>* self) {
-        message_handler routines = working_node_routines(self);
+        message_handler routines = working_node::working_node_routines(self);
         return routines;
     }
     static message_handler working_node_routines(
@@ -48,27 +51,32 @@ protected:
            return {
             [=](connect_atom atom,
                 string scheduler_host,uint16_t scheduler_port,
-                string local_host,uint16_t bound_port,
+                string localhost,uint16_t bound_port,
                 node_role role) {
-                auto scheduler = connect(
+                LOG(INFO) << "new " << to_string(role) << 
+                    " try to connect to scheduler at " << 
+                    scheduler_host << ":" << scheduler_port;
+                auto scheduler = node::connect(self,
                     scheduler_host,scheduler_port);
+                LOG(INFO) << "new " << to_string(role) << 
+                    " connected to scheduler";
                 self->state.scheduler = scheduler;
                 self->request(actor_cast<actor>(scheduler),
                     infinite,connect_to_opponent_atom::value,
-                    local_host,bound_port,role
+                    localhost,bound_port,role
                     );
             },
             //connect to incoming oppoeant node
            [=](connect_to_opponent_atom atom,
                const string& host,uint16_t port) {
-                auto incoming_node = node::connect(host,port);
-                    self->state.opponent_nodes.push_back(incoming_node);
+                auto incoming_node = node::connect(self,host,port);
+                self->state.opponent_nodes.push_back(incoming_node);
             },
             //connect to existing opponent nodes      
             [=](connect_back_atom atom,
                vector<pair<string,uint16_t>> server_host_and_ports) {
                 for(auto server_host_and_port : server_host_and_ports) {
-                    auto incoming_node = node::connect(
+                    auto incoming_node = node::connect(self,
                     server_host_and_port.first,
                     server_host_and_port.second);
                 }

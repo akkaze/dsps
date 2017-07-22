@@ -32,7 +32,8 @@ public:
             scheduler_node::scheduler_bhvr);
         auto scheduler_port = this->scheduler_port();
         this->set_working_actor(scheduler);
-        this->publish(scheduler); 
+        this->publish(scheduler);
+        LOG(INFO) << "successfully publish new scheduler at " << scheduler_port; 
     }
     void demand_to_block(const block_group& group) {
         auto scheduler = this->working_actor();
@@ -51,8 +52,9 @@ public:
                 std::string host,uint16_t port,
                 node_role role) ->
                     result<connect_back_atom,vector<pair<string,uint16_t>>>{
+                LOG(INFO) << "new " << to_string(role) << " try to connect to opponent nodes"; 
                 if(role == node_role::worker) {
-                    auto worker = node::connect(host,port);
+                    auto worker = node::connect(self,host,port);
                     self->state.current_workers.push_back(
                         make_pair(worker,make_pair(host,port)));
                     vector<pair<string,uint16_t>> server_host_and_ports;
@@ -65,7 +67,7 @@ public:
                     return {connect_back_atom::value,server_host_and_ports};
                 }
                 else if(role == node_role::server) {
-                    auto server = node::connect(host,port);
+                    auto server = node::connect(self,host,port);
                     self->state.current_servers.push_back(
                         make_pair(server,make_pair(host,port)));
                     vector<pair<string,uint16_t>> worker_host_and_ports;

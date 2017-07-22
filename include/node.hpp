@@ -22,16 +22,15 @@ using namespace caf;
 class node {
 public:
     node(const std::shared_ptr<config>& cfg) {
-        cfg_ = cfg;       
+        cfg_ = cfg;      
     } 
 public:
-    template <class Actor = actor>
-    static const Actor& connect(const std::string& host, uint16_t port) {
-        auto incoming_node = actor_manager::get()->system()
-            ->middleman().remote_actor(host,port);
-        CHECK(incoming_node)<< "unable to connect to node at host: " 
-                << host << "port :" << port
-                << actor_manager::get()->system()->render(incoming_node.error());
+    template <class IncomingActor,class Actor = actor>
+    static const Actor& connect(IncomingActor* self,const std::string& host, uint16_t port) {
+        auto incoming_node = self->system().middleman().remote_actor(host,port);
+        //CHECK(incoming_node)<< "unable to connect to node at host: " 
+        //        << host << "port :" << port
+        //        << self->system().render(incoming_node.error()) << endl;
         return *incoming_node;
     }
     template <class Actor = actor>
@@ -55,19 +54,19 @@ public:
             }
         );
     }
-    const node_role& role() const {
+    node_role role() const {
         return cfg_->role();
     }
-    const std::string& scheduler_host() const {
+    std::string scheduler_host() const {
         return cfg_->scheduler_host();
     }
-    const uint16_t& scheduler_port() const {
+    uint16_t scheduler_port() const {
         return cfg_->scheduler_port();
     }
-    const uint16_t& bound_port() const {
+    uint16_t bound_port() const {
         return bound_port_;
     }
-    const string& localhost() const {
+    string localhost() const {
         return localhost_;
     }
     void set_working_actor(actor& working_actor) {

@@ -4,9 +4,13 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
+#include "caf/all.hpp"
+#include "utils/logging.hpp"
 
-enum class node_role {
+using namespace std;
+using namespace caf;
+
+enum node_role : uint32_t {
     scheduler,
     worker,
     server
@@ -22,15 +26,14 @@ node_role from_string(string role_string) {
 }
 
 string to_string(node_role role) {
-    switch(role) {
-        case node_role::scheduler:
+     if(role == node_role::scheduler)
             return "scheduler";
-        case node_role::worker:
+     else if(role == node_role::worker)
             return "worker";
-        case node_role::server:
+     else if(role == node_role::server)
             return "server";
-    }
 }
+
 
 enum class block_group {
     all_workers,
