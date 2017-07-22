@@ -28,15 +28,15 @@ public:
     template <class IncomingActor,class Actor = actor>
     static const Actor& connect(IncomingActor* self,const std::string& host, uint16_t port) {
         auto incoming_node = self->system().middleman().remote_actor(host,port);
-        //CHECK(incoming_node)<< "unable to connect to node at host: " 
-        //        << host << "port :" << port
-        //        << self->system().render(incoming_node.error()) << endl;
+        CHECK(incoming_node)<< "unable to connect to node at host: " 
+                << host << "port :" << port
+                << self->system().render(incoming_node.error()) << endl;
         return *incoming_node;
     }
     template <class Actor = actor>
-    void publish(const Actor& self) {
+    void publish(const Actor& self,uint16_t port = 0) {
         auto expected_port = actor_manager::get()->system()
-            ->middleman().publish(self,0);
+            ->middleman().publish(self,port);
         CHECK(expected_port) << actor_manager::get()->system()
             ->render(expected_port.error());
         bound_port_ = *expected_port;

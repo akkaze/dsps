@@ -18,6 +18,7 @@ struct working_node_state {
     actor scheduler;
     vector<actor> opponent_nodes;
     strong_actor_ptr blk_atr;
+    uint32_t node_id;
 };
 
 class working_node:public node {
@@ -61,16 +62,17 @@ public:
                 LOG(INFO) << "new " << to_string(role) << 
                     " connected to scheduler";
                 self->state.scheduler = scheduler;
-                self->request(actor_cast<actor>(scheduler),
-                    infinite,connect_to_opponent_atom::value,
-                    localhost,bound_port,role
-                    );
+                self->request(scheduler,infinite,
+                    connect_to_opponent_atom::value,
+                    localhost,bound_port,role);
             },
             //connect to incoming oppoeant node
            [=](connect_to_opponent_atom atom,
-               const string& host,uint16_t port) {
+               const string& host,uint16_t port,
+               node_role role) {
                 auto incoming_node = node::connect(self,host,port);
                 self->state.opponent_nodes.push_back(incoming_node);
+                LOG(INFO) << "new " << to_string(role) << " connected to its opponent";
             },
             //connect to existing opponent nodes      
             [=](connect_back_atom atom,

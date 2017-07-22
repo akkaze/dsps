@@ -16,7 +16,11 @@ public:
   string role_;
 public:
   config() {
+      add_message_type<vector<int>>("vi");
       add_message_type<node_role>("node_role");
+      add_message_type<host_and_port>("host_and_port");
+      add_message_type<vector<host_and_port>>("host_and_port_v");
+      add_message_type<vector<pair<string,uint16_t>>>("addrs");
         opt_group{custom_options_, "global"}
         .add(role_, "node_role", "(worker|server|scheduler)")
         .add(scheduler_port_,"scheduler_port","scheduler_port")

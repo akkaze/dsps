@@ -41,7 +41,14 @@ enum class block_group {
     all_servers_and_workers,
     all_nodes
 };
-
+struct host_and_port {
+    string host;
+    uint16_t port;
+};
+template <class Inspector>
+typename Inspector::result_type inspect(Inspector& f, host_and_port& x) {
+  return f(meta::type_name("addrs"), x.host, x.port);
+}
 struct message_t {
 };
 #endif

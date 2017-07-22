@@ -32,7 +32,7 @@ public:
             scheduler_node::scheduler_bhvr);
         auto scheduler_port = this->scheduler_port();
         this->set_working_actor(scheduler);
-        this->publish(scheduler);
+        this->publish(scheduler,scheduler_port);
         LOG(INFO) << "successfully publish new scheduler at " << scheduler_port; 
     }
     void demand_to_block(const block_group& group) {
@@ -50,36 +50,45 @@ public:
        return {
             [=](const connect_to_opponent_atom& atom,
                 std::string host,uint16_t port,
-                node_role role) ->
-                    result<connect_back_atom,vector<pair<string,uint16_t>>>{
-                LOG(INFO) << "new " << to_string(role) << " try to connect to opponent nodes"; 
+                node_role role) {
+                LOG(INFO) << "new " << to_string(role) 
+                    << " try to connect to opponent nodes"; 
                 if(role == node_role::worker) {
                     auto worker = node::connect(self,host,port);
+                    LOG(INFO) << "scheduler connected to new worker";
                     self->state.current_workers.push_back(
                         make_pair(worker,make_pair(host,port)));
                     vector<pair<string,uint16_t>> server_host_and_ports;
                     for(auto serv : self->state.current_servers) {
+                        LOG(INFO) << "new worker try to connect server at " 
+                            << host << ":" << port;
                         self->request(actor_cast<actor>(serv.first),
                             infinite,connect_to_opponent_atom::value,
-                            host,port);
+                            host,port,role);
                         server_host_and_ports.push_back(serv.second);
                     }
-                    return {connect_back_atom::value,server_host_and_ports};
+                    auto sender = self->current_sender();
+                    self->request(actor_cast<actor>(sender),infinite,
+                        connect_back_atom::value,server_host_and_ports);
                 }
                 else if(role == node_role::server) {
                     auto server = node::connect(self,host,port);
+                    LOG(INFO) << "scheduler connected to new server";
                     self->state.current_servers.push_back(
                         make_pair(server,make_pair(host,port)));
                     vector<pair<string,uint16_t>> worker_host_and_ports;
                     for(auto work : self->state.current_workers) {
+                        LOG(INFO) << "new server try to connect worker at "
+                            << host << ":" << port;
                         self->request(actor_cast<actor>(work.first),
                             infinite,connect_to_opponent_atom::value,
-                            host,port);
+                            host,port,role);
                         worker_host_and_ports.push_back(work.second);
                     }
-                    return {connect_back_atom::value,worker_host_and_ports};
+                    auto sender = self->current_sender();
+                    self->request(actor_cast<actor>(sender),infinite,
+                        connect_back_atom::value,worker_host_and_ports);
                 }
-
             }
         };
     }
