@@ -10,29 +10,23 @@ shift
 export DSPS_NUM_WORKER=$1
 shift
 bin=$1
-shift
-arg="$@"
 
 # start the scheduler
-DSPS_PS_ROOT_URI='127.0.0.1'
+DSPS_PS_ROOT_URI='10.170.124.249'
 DSPS_PS_ROOT_PORT=8000
-${bin} --scheduler-host=${DSPS_PS_ROOT_URI} \
-    --scheduler-port=${DSPS_PS_ROOT_PORT} \
-    --node_role='scheduler' &
+${bin} --scheduler_host=${DSPS_PS_ROOT_URI} \
+    --scheduler_port=${DSPS_PS_ROOT_PORT} \
+    --node_role='SCHEDULER' &
 
-
+sleep 1
 # start servers
 for ((i=0; i<${DSPS_NUM_SERVER}; ++i)); do
-    ${bin} --scheduler-host=${DSPS_PS_ROOT_URI} \ 
-        --scheduler-port=${DSPS_PS_ROOT_PORT} \ 
-        --node_role='server' &
+    ${bin} --scheduler_host=${DSPS_PS_ROOT_URI} --scheduler_port=${DSPS_PS_ROOT_PORT} --node_role='SERVER' &
 done
 
 # start workers
 for ((i=0; i<${DSPS_NUM_WORKER}; ++i)); do
-    ${bin} --scheduler-host=${DSPS_PS_ROOT_URI} \ 
-        --scheduler-port=${DSPS_PS_ROOT_PORT} \ 
-        --node_role='worker' &
+    ${bin} --scheduler_host=${DSPS_PS_ROOT_URI} --scheduler_port=${DSPS_PS_ROOT_PORT} --node_role='WORKER' &
 done
 
 wait
