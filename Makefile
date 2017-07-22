@@ -4,7 +4,7 @@ endif
 
 INCPATH = -I./include
 
-CFLAGS = -std=c++11 -fPIC -O3 -ggdb -Wall -finline-functions $(INCPATH)
+CFLAGS = -std=c++11 -fPIC -O3 -ggdb -finline-functions $(INCPATH)
 
 all: test
 
