@@ -10,6 +10,12 @@
 using namespace std;
 using namespace caf;
 
+#define DEFAULT_ERROR_HANLDER \
+    [&](error& err) {  \
+        aout(this) << this->system().render(err) << endl; \
+    }
+
+
 enum node_role : uint32_t {
     scheduler,
     worker,
@@ -34,7 +40,12 @@ string to_string(node_role role) {
             return "server";
 }
 
-
+string opponent_role(node_role role) {
+    if(role == node_role::worker)
+            return "server";
+     else if(role == node_role::server)
+            return "worker";
+}
 enum class block_group {
     all_workers,
     all_servers,

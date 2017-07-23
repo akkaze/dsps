@@ -23,7 +23,10 @@ class node {
 public:
     node(const std::shared_ptr<config>& cfg) {
         cfg_ = cfg;      
-    } 
+    }
+    //virtual ~node() {
+    //    stop();
+    //} 
 public:
     template <class IncomingActor,class Actor = actor>
     static const Actor& connect(IncomingActor* self,const std::string& host, uint16_t port) {
@@ -41,6 +44,21 @@ public:
             ->render(expected_port.error());
         bound_port_ = *expected_port;
         localhost_ = get_local_ip();
+    }
+    //set actor role before everything started
+    void set_role() {
+        scoped_actor blk_atr{*(actor_manager::get()->system())};
+        auto role = this->role();
+        auto localhost = this->localhost();
+        auto bound_port = this->bound_port();
+        blk_atr->request(working_actor_,infinite,
+            set_role_atom::value,role,
+            localhost,bound_port);
+    }
+    //stop working actor
+    void stop() {
+        scoped_actor blk_atr{*(actor_manager::get()->system())};
+        blk_atr->request(working_actor_,infinite,quit_atom::value);
     }
     void ask_for_blocking(const block_group& group) {
         scoped_actor blk_atr{*(actor_manager::get()->system())};
@@ -74,6 +92,20 @@ public:
     }
     const actor& working_actor() const {
         return working_actor_;
+    }
+    template <class State>
+    static message_handler common_message_handler(stateful_actor<State>* self) {
+        return {
+            [=](set_role_atom atom,node_role role,
+                string localhost,uint16_t bound_port) {
+                self->state.role = role;
+                self->state.localhost = localhost;
+                self->state.bound_port = bound_port;
+            },
+            [=](quit_atom atom) {
+                self->quit();
+            } 
+        };
     }
 private:
     std::shared_ptr<config> cfg_;

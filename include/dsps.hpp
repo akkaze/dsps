@@ -18,11 +18,6 @@
 using namespace std;
 using namespace caf;
 
-#define DEFAULT_ERROR_HANLDER \
-    [&](error& err) {  \
-        aout(this) << this->system().render(err) << endl; \
-    }
-
 
 void start(size_t argc,char** argv) {
     actor_manager::get()->init(argc,argv);
