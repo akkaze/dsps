@@ -26,7 +26,7 @@ struct working_node_state {
 
 class working_node:public node {
 public:
-    working_node(const shared_ptr<config>& cfg) : node(cfg) {
+    working_node() {
         auto working_actor = actor_manager::get()->system()->spawn(
             working_node::working_node_bhvr);
         //publish worker on the internet through middleman
@@ -50,7 +50,8 @@ public:
         stateful_actor<working_node_state>* self) {
         message_handler common_routines = node::common_message_handler<working_node_state>(self);
         message_handler working_routines = working_node::working_node_routines(self);
-        message_handler routines = working_routines.or_else(common_routines);
+        message_handler block_routines = node::block_handler<working_node_state>(self);
+        message_handler routines = working_routines.or_else(common_routines).or_else(block_routines);
         return routines;
     }
     static message_handler working_node_routines(
@@ -114,6 +115,5 @@ public:
         };
    }
 private:
-    actor working_actor_;
 };
 #endif

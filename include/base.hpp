@@ -52,10 +52,27 @@ enum class block_group {
     all_servers_and_workers,
     all_nodes
 };
+
+string to_string(block_group group) {
+    switch(group) {
+        case block_group::all_workers:
+            return "all workers";
+        case block_group::all_servers:
+            return "all servers";
+        case block_group::all_servers_and_workers:
+            return "all servers and workers";
+        case block_group::all_nodes:
+            return "all nodes";
+        default:
+            return "";
+    }
+}
+
 struct host_and_port {
     string host;
     uint16_t port;
 };
+
 template <class Inspector>
 typename Inspector::result_type inspect(Inspector& f, host_and_port& x) {
   return f(meta::type_name("addrs"), x.host, x.port);

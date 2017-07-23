@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "caf/all.hpp"
 #include "caf/io/all.hpp"
@@ -18,16 +19,11 @@
 using namespace std;
 using namespace caf;
 
-
-void start(size_t argc,char** argv) {
+node_role my_role() {
+    return actor_manager::get()->cfg()->role();
+}
+void init(size_t argc,char** argv) {
     actor_manager::get()->init(argc,argv);
-    shared_ptr<config> cfg = actor_manager::get()->cfg();
-    if(cfg->role() == node_role::scheduler)
-        std::unique_ptr<scheduler_node> scheduler(new scheduler_node(cfg)); 
-    else if(cfg->role() == node_role::worker)
-        std::unique_ptr<worker_node> worker(new worker_node(cfg));
-    else if(cfg->role() == node_role::server)
-        std::unique_ptr<server_node> server(new server_node(cfg));
 }
 
 void stop() {

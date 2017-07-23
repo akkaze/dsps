@@ -21,8 +21,8 @@ using namespace caf;
 
 class node {
 public:
-    node(const std::shared_ptr<config>& cfg) {
-        cfg_ = cfg;      
+    node() {
+        cfg_ = actor_manager::get()->cfg();      
     }
     //virtual ~node() {
     //    stop();
@@ -56,13 +56,13 @@ public:
             localhost,bound_port);
     }
     //stop working actor
-    void stop() {
+    void quit() {
         scoped_actor blk_atr{*(actor_manager::get()->system())};
         blk_atr->request(working_actor_,infinite,quit_atom::value);
     }
     void ask_for_blocking(const block_group& group) {
         scoped_actor blk_atr{*(actor_manager::get()->system())};
-        blk_atr->request(working_actor_,infinite,block_atom::value,group);
+        blk_atr->request(working_actor_,infinite,ask_for_block_atom::value,group);
         blk_atr->receive(
             [&](const continue_atom ){
                 aout(blk_atr) << "continue" << endl;
@@ -105,6 +105,32 @@ public:
             [=](quit_atom atom) {
                 self->quit();
             } 
+        };
+    }
+    template <class State>
+    static message_handler ask_block_handler(stateful_actor<State>* self) {
+        return {
+            [=](ask_for_block_atom atom,const block_group& group) {
+                auto role = self->state.role;
+                auto node_id = self->state.node_id; 
+                auto sender = self->current_sender();
+                self->state.blk_atr = sender;
+                if(self->state.role != node_role::scheduler) {
+                    LOG(INFO) << to_string(role) << " [" << node_id 
+                        << "] is blocked in block group: " << to_string(group); 
+                    self->request(self->state.scheduler,
+                        infinite,block_atom::value,group);
+                }
+                else {
+                    LOG(INFO) << "scheduler is blocked in block group: " << to_string(group);
+                    self->request(actor_cast<actor>(self),
+                        infinite,block_atom::value,group);
+                }
+            },
+            [=](continue_atom atom) {
+                self->request(actor_cast<actor>(self->state.blk_atr),
+                    infinite,continue_atom::value);
+            }
         };
     }
 private:
