@@ -45,12 +45,13 @@ public:
             scheduler_host,scheduler_port);
         
     }
+    
 public:
     static behavior working_node_bhvr(
         stateful_actor<working_node_state>* self) {
         message_handler common_routines = node::common_message_handler<working_node_state>(self);
         message_handler working_routines = working_node::working_node_routines(self);
-        message_handler block_routines = node::block_handler<working_node_state>(self);
+        message_handler block_routines = working_node::block_handler(self);
         message_handler routines = working_routines.or_else(common_routines).or_else(block_routines);
         return routines;
     }
@@ -114,6 +115,29 @@ public:
             }
         };
    }
+    static message_handler block_handler(stateful_actor<working_node_state>* self) {
+        return {
+            [=](block_atom atom,const block_group& group) {
+                auto role = self->state.role;
+                auto node_id = self->state.node_id; 
+                auto sender = self->current_sender();
+                self->state.blk_atr = sender;
+                LOG(INFO) << to_string(role) << " [" << node_id 
+                    << "] is blocked in block group: " << to_string(group); 
+                self->request(self->state.scheduler,
+                    infinite,block_atom::value,group);
+            },
+            [=](continue_atom atom) {
+                self->request(actor_cast<actor>(self->state.blk_atr),
+                    infinite,continue_atom::value);
+                auto role = self->state.role;
+                auto node_id = self->state.node_id;
+                LOG(INFO) << to_string(role) << " [" << node_id
+                   << "] resumed";
+            }
+        };
+    }
+
 private:
 };
 #endif

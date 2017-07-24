@@ -15,6 +15,7 @@ using namespace caf;
         aout(this) << this->system().render(err) << endl; \
     }
 
+#define NOOP
 
 enum node_role : uint32_t {
     scheduler,

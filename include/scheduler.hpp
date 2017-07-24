@@ -53,7 +53,7 @@ public:
     static behavior scheduler_bhvr(stateful_actor<scheduler_state>* self) {
         message_handler common_routines = node::common_message_handler<scheduler_state>(self);
         message_handler working_routines = scheduler_node::scheduler_routines(self);
-        message_handler block_routines = node::block_handler<scheduler_state>(self);
+        message_handler block_routines = scheduler_node::block_handler(self);
         message_handler routines = working_routines.or_else(common_routines).or_else(block_routines);
         return routines;
     }
@@ -164,6 +164,9 @@ public:
                         break;
                     }
                    case block_group::all_nodes: {
+                        if(self->state.current_servers.size() == 0)
+                            LOG(INFO) << "scheduler is blocked in block group: " 
+                                << to_string(group);
                         uint32_t num_nodes = self->state.current_workers.size() +
                             self->state.current_servers.size() + 1;
                         if(self->state.num_recv_blk_msgs == num_nodes) {
@@ -175,8 +178,9 @@ public:
                                 self->request(actor_cast<actor>(work.first),
                                     infinite,continue_atom::value);
                             }
-                            self->request(actor_cast<actor>(self),infinite,continue_atom::value);
+                            self->request(actor_cast<actor>(self->state.blk_atr),infinite,continue_atom::value);
                             self->state.num_recv_blk_msgs = 0;
+                            LOG(INFO) << "scheduler resumed";
                         }
                         break;
                     }
@@ -184,6 +188,7 @@ public:
             }
         };
     }
+
 private:
 };
 #endif
